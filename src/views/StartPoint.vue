@@ -11,7 +11,7 @@
         <span class="cloud left"></span>
         <span class="cloud right"></span>
       </div>
-      <router-link to="/game">
+      <router-link to="/chat">
         <button class="navigate-btn">开启冒险之旅</button>
       </router-link>
     </div>
