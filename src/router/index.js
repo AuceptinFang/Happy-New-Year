@@ -1,23 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StartPoint from '../views/StartPoint.vue'
-import EndPoint from '../views/EndPoint.vue'
-
-const routes = [
-  {
-    path: '/',
-    name: 'StartPoint',
-    component: StartPoint
-  },
-  {
-    path: '/endpoint',
-    name: 'EndPoint',
-    component: EndPoint
-  }
-]
+import GamePage from '../views/GamePage.vue'
+import PunishmentPage from '../views/PunishmentPage.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'start',
+      component: StartPoint
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: GamePage
+    },
+    {
+      path: '/punishment',
+      name: 'punishment',
+      component: PunishmentPage
+    }
+  ]
 })
 
 export default router 
