@@ -7,6 +7,11 @@
     <div class="content">
       <h1 class="title">新春迷宫大冒险</h1>
       <p class="subtitle">龙年吉祥 · 欢乐起航</p>
+      <div class="story-box">
+        <p class="story-text">你睁开眼睛，发现自己置身于一个陌生而神秘的世界。</p>
+        <p class="story-text">四周环绕着祥和的新春气息，却又透着一丝诡异。</p>
+        <p class="story-text">前方似乎有什么在等待着你...</p>
+      </div>
       <div class="decoration">
         <span class="cloud left"></span>
         <span class="cloud right"></span>
@@ -178,5 +183,23 @@ export default {
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
+}
+
+.story-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 2rem auto;
+  max-width: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.story-text {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0.8rem 0;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
 }
 </style> 

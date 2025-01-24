@@ -6,6 +6,8 @@ import AIChatPage from '../views/AIChatPage.vue'
 import SupportPage from '../views/SupportPage.vue'
 import DarkPage from '../views/DarkPage.vue'
 import DinoPage from '../views/DinoPage.vue'
+import NamePage from '../views/NamePage.vue'
+import endpoint from '../views/endpoint.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,16 @@ const router = createRouter({
       path: '/dino',
       name: 'dino',
       component: DinoPage
+    },
+    {
+      path: '/name',
+      name: 'name',
+      component: NamePage
+    },
+    {
+      path: '/endpoint',
+      name: 'endpoint',
+      component: endpoint
     }
   ]
 })

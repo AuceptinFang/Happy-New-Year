@@ -12,6 +12,12 @@
         <div class="high-score">最高分: {{ highScore }}</div>
       </div>
       <div class="game-area" ref="gameArea">
+        <div class="story-text" v-if="!gameStarted">
+          <h2>前方危险！</h2>
+          <p>穿过大门后，你发现前方有无数奇怪的图形朝你冲来！</p>
+          <p>按空格键或点击屏幕可以跳跃，躲避障碍物。</p>
+          <button class="start-game-btn" @click="startGameWithStory">开始挑战</button>
+        </div>
         <div 
           class="dino" 
           :class="{ 'jump': isJumping }"
@@ -33,7 +39,7 @@
         ></div>
         <div class="ground"></div>
         
-        <router-link to="/game" class="cloud-button-container">
+        <router-link to="/name" class="cloud-button-container">
           <div class="cloud-button">
             <div class="cloud-body">
               <div class="cloud-circle circle1"></div>
@@ -68,6 +74,7 @@ const isGameOver = ref(false)
 const obstacleSpawnInterval = ref(null)
 const lastJumpTime = ref(0)
 const isDarkMode = ref(false)
+const gameStarted = ref(false)
 
 const JUMP_HEIGHT = 150
 const JUMP_DURATION = 500
@@ -237,8 +244,13 @@ const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
 }
 
-onMounted(() => {
+const startGameWithStory = () => {
+  gameStarted.value = true
   startGame()
+}
+
+onMounted(() => {
+  // 不要立即开始游戏，等待用户点击开始按钮
   window.addEventListener('keydown', handleKeyPress)
 })
 
@@ -589,5 +601,48 @@ onUnmounted(() => {
     width: 90vw;
     height: 200px;
   }
+}
+
+.story-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.story-text h2 {
+  color: #ff4d4d;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.story-text p {
+  color: #333;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.start-game-btn {
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
 }
 </style> 
