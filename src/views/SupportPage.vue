@@ -22,7 +22,7 @@
         </div>
       </div>
       <router-link to="/chat">
-        <button class="return-btn">返回继续解谜</button>
+        <button class="return-btn">返回</button>
       </router-link>
     </div>
     <div class="floating-elements">

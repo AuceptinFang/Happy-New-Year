@@ -1,6 +1,9 @@
 <template>
   <div class="punishment-page">
     <div class="content">
+      <div class="text-section">
+        <p class="story-text">“可恶的数学！我最讨厌数学了！”你对自己说，“唉，事到如今，只能受罚了，让我看看惩罚是——不好！”</p>
+      </div>
       <div class="text-container">
         <transition-group name="fade">
           <p v-for="(text, index) in visibleTexts" 
@@ -134,6 +137,19 @@ export default {
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.text-section {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.story-text {
+  color: #ff4d4d;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+  text-shadow: 1px 1px 2px rgba(255, 77, 77, 0.2);
 }
 
 .text-container {
