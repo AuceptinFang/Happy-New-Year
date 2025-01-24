@@ -267,6 +267,12 @@ const startGameWithStory = () => {
 onMounted(() => {
   // 不要立即开始游戏，等待用户点击开始按钮
   window.addEventListener('keydown', handleKeyPress)
+  setTimeout(() => {
+    if (!gameStarted.value) {
+      gameStarted.value = true
+      startGame()
+    }
+  }, 3000)
 })
 
 onUnmounted(() => {
