@@ -95,37 +95,38 @@ export default {
 <style scoped>
 .game-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #1a1a2e);
+  background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  font-family: 'Microsoft YaHei', sans-serif;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .content {
   width: 100%;
   max-width: 900px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border-radius: 30px;
-  padding: 3rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: white;
+  border-radius: 15px;
+  padding: clamp(1rem, 3vw, 2rem);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
 .question-container {
+  max-width: min(800px, 95%);
   width: 100%;
+  background: white;
+  border-radius: 15px;
+  padding: clamp(1rem, 3vw, 2rem);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
 .question-title {
-  color: #fff;
-  font-size: 2.2rem;
-  margin-bottom: 2.5rem;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: #333;
+  margin-bottom: 1.5rem;
   text-align: center;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: 2px;
 }
 
 .question-content {
@@ -138,46 +139,41 @@ export default {
 .question-image {
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0 auto 2rem;
+  text-align: center;
 }
 
-.math-image {
+.question-image img {
   width: 100%;
   height: auto;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-}
-
-.math-image:hover {
-  transform: scale(1.02);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .options-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 600px;
-  margin: 2rem auto;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(0.5rem, 2vw, 1rem);
+  margin-bottom: 2rem;
 }
 
 .option-item {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 1.2rem 2rem;
-  border-radius: 15px;
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .option-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #e9ecef;
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .option-item.selected {
@@ -193,29 +189,30 @@ export default {
 }
 
 .option-text {
-  color: #fff;
+  color: #333;
   font-size: 1.2rem;
   font-weight: 500;
 }
 
 .submit-btn {
-  background: linear-gradient(45deg, #409cff, #3178ff);
-  border: none;
-  padding: 1rem 3rem;
-  border-radius: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  background: linear-gradient(45deg, #007bff, #0056b3);
   color: white;
-  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem auto;
+  display: block;
 }
 
 .submit-btn:hover {
+  background: linear-gradient(45deg, #0056b3, #004085);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(64, 156, 255, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-text {
@@ -233,14 +230,10 @@ export default {
 
 .result-message {
   text-align: center;
-  padding: 1.5rem;
-  border-radius: 15px;
-  font-size: 1.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  animation: fadeIn 0.5s ease;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
 .result-icon {
@@ -249,43 +242,42 @@ export default {
 }
 
 .correct {
-  color: #4cd137;
+  background: #d4edda;
+  color: #155724;
 }
 
 .incorrect {
-  color: #ff4757;
+  background: #f8d7da;
+  color: #721c24;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* 移动端适配 */
 @media (max-width: 768px) {
-  .content {
-    padding: 2rem;
-  }
-
-  .question-title {
-    font-size: 1.8rem;
-  }
-
   .options-container {
     grid-template-columns: 1fr;
   }
 
   .option-item {
-    padding: 1rem 1.5rem;
+    text-align: left;
   }
 
-  .option-text {
-    font-size: 1.1rem;
+  .submit-btn {
+    width: 90%;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .question-container {
+    padding: 1rem;
+  }
+
+  .question-image {
+    margin: 1rem auto;
+  }
+
+  .option-item {
+    padding: 0.8rem;
   }
 }
 

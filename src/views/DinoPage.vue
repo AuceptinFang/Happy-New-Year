@@ -263,42 +263,43 @@ onUnmounted(() => {
 
 <style scoped>
 .game-container {
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  width: min(800px, 95%);
+  height: min(400px, 50vh);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin: clamp(1rem, 3vw, 2rem) auto;
 }
 
 .dino-game {
-  width: 800px;
-  height: 300px;
-  border: 2px solid #333;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+  padding: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   overflow: hidden;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
 }
 
 .score-board {
   position: absolute;
-  top: 20px;
-  right: 80px;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
   font-family: 'Courier New', monospace;
   z-index: 10;
   background: rgba(255, 255, 255, 0.9);
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: clamp(0.5rem, 2vw, 1rem);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .score, .high-score {
-  font-size: 18px;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   margin: 5px 0;
-  color: #2c3e50;
+  color: #4a4a4a;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -309,16 +310,15 @@ onUnmounted(() => {
 }
 
 .dino {
-  width: 40px;
-  height: 60px;
-  background: linear-gradient(135deg, #333 0%, #222 100%);
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  background-color: #4a4a4a;
   position: absolute;
-  left: 50px;
   bottom: 0;
-  border-radius: 8px 8px 4px 4px;
+  left: 50px;
+  border-radius: 50%;
   transition: transform 0.1s linear;
   will-change: transform;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dino-eye {
@@ -333,26 +333,29 @@ onUnmounted(() => {
 }
 
 .obstacle {
+  width: clamp(30px, 6vw, 40px);
+  height: clamp(30px, 6vw, 40px);
   position: absolute;
+  bottom: 0;
+  right: -50px;
+  transition: transform 0.1s linear;
   will-change: transform;
 }
 
-.cactus {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  border-radius: 3px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.obstacle.cactus {
+  background-color: #2d5a27;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
-.rock {
-  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.obstacle.rock {
+  background-color: #808080;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 }
 
-.bird {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  border-radius: 50% 50% 0 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.obstacle.bird {
+  background-color: #ff4d4d;
+  clip-path: polygon(0% 35%, 50% 0%, 100% 35%, 50% 100%);
+  bottom: 100px;
 }
 
 .ground {
@@ -368,46 +371,49 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: clamp(1rem, 3vw, 2rem);
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
+  width: min(300px, 80%);
+}
+
+.game-over h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
 }
 
 .restart-btn {
-  margin-top: 1rem;
-  padding: 0.8rem 1.5rem;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  background: linear-gradient(45deg, #4169E1, #87CEEB);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: all 0.3s;
-  font-size: 16px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  transition: all 0.3s ease;
+  margin-top: clamp(1rem, 3vw, 1.5rem);
 }
 
 .restart-btn:hover {
-  background: linear-gradient(135deg, #2980b9 0%, #2472a4 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
 }
 
 .cloud-button-container {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
   text-decoration: none;
   z-index: 10;
 }
 
 .cloud-button {
   position: relative;
-  width: 100px;
-  height: 60px;
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(30px, 6vw, 40px);
   cursor: pointer;
   animation: floatAndRotate 8s infinite linear;
   filter: drop-shadow(0 5px 15px rgba(255, 255, 255, 0.4));
@@ -596,13 +602,6 @@ onUnmounted(() => {
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
-@media (max-width: 900px) {
-  .dino-game {
-    width: 90vw;
-    height: 200px;
-  }
-}
-
 .story-text {
   position: absolute;
   top: 50%;
@@ -644,5 +643,41 @@ onUnmounted(() => {
 .start-game-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .game-container {
+    height: 60vh;
+  }
+
+  .dino {
+    left: 30px;
+  }
+
+  .score {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .game-container {
+    height: 50vh;
+  }
+
+  .game-over {
+    width: 90%;
+  }
+
+  .restart-btn {
+    width: 100%;
+  }
+
+  .cloud-button {
+    width: 40px;
+    height: 30px;
+  }
 }
 </style> 

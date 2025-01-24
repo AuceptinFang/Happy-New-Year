@@ -471,26 +471,26 @@ onMounted(() => {
 .container {
   max-width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+  background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
   font-family: 'Microsoft YaHei', sans-serif;
   position: relative;
-  padding: 2rem 0;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .content-wrapper {
-  max-width: 800px;
+  max-width: min(800px, 95%);
   margin: 0 auto;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(196, 30, 58, 0.1);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
-  color: #c41e3a;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: clamp(1.5rem, 4vw, 2rem);
   text-shadow: 2px 2px 4px rgba(196, 30, 58, 0.1);
 }
 
@@ -521,70 +521,46 @@ h1 {
 }
 
 .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.2rem, 3vw, 2rem);
   background: #fff;
   padding: 1.5rem;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(196, 30, 58, 0.1);
 }
 
-label {
+.form-label {
   display: block;
-  margin-bottom: 0.8rem;
-  font-weight: bold;
-  color: #333;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
 .date-inputs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
 
-.date-inputs select {
-  flex: 1;
-  padding: 0.8rem;
-  border: 1px solid #ffcdd2;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.date-inputs select:hover {
-  border-color: #c41e3a;
-}
-
-input {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ffcdd2;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #c41e3a;
-  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
-}
-
-.zodiac-display {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #666;
-  background: #fff5f5;
-  padding: 0.8rem;
-  border-radius: 8px;
-}
-
-.zodiac-text {
-  color: #c41e3a;
-  font-weight: bold;
-  margin-left: 0.5rem;
+.date-select {
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
 .submit-btn {
@@ -737,7 +713,22 @@ input:focus, select:focus {
   transform: translateX(5px);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .date-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-btn {
+    width: 90%;
+  }
+
+  .bagua-container {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
   .content-wrapper {
     padding: 1rem;
   }

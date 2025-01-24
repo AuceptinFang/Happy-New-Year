@@ -48,10 +48,12 @@ export default {
   position: relative;
   z-index: 2;
   padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .title {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   color: #fff;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   margin-bottom: 1rem;
@@ -59,15 +61,33 @@ export default {
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   color: #ffd700;
   margin-bottom: 2rem;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
+.story-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-radius: 15px;
+  margin: 2rem auto;
+  max-width: min(600px, 90%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.story-text {
+  color: #fff;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  margin: 0.8rem 0;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
+}
+
 .navigate-btn {
-  padding: 15px 40px;
-  font-size: 1.2rem;
+  padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 40px);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   background: linear-gradient(45deg, #ffd700, #ffb700);
   color: #d4380d;
   border: none;
@@ -75,6 +95,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
 }
 
 .navigate-btn:hover {
@@ -84,8 +105,8 @@ export default {
 }
 
 .lantern {
-  width: 60px;
-  height: 80px;
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(60px, 10vw, 80px);
   background: #ff4d4d;
   border-radius: 30px;
   position: absolute;
@@ -185,21 +206,43 @@ export default {
   50% { transform: translateY(-20px); }
 }
 
-.story-box {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  border-radius: 15px;
-  margin: 2rem auto;
-  max-width: 600px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .lantern {
+    top: 20px;
+  }
+
+  .lantern.left {
+    left: 5%;
+  }
+
+  .lantern.right {
+    right: 5%;
+  }
+
+  .cloud {
+    display: none;
+  }
+
+  .firework {
+    transform: scale(0.7);
+  }
 }
 
-.story-text {
-  color: #fff;
-  font-size: 1.2rem;
-  margin: 0.8rem 0;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-  line-height: 1.6;
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .story-box {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+
+  .navigate-btn {
+    width: 90%;
+    max-width: 300px;
+  }
 }
 </style> 
