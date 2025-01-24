@@ -1,0 +1,20 @@
+<invoke name="run_terminal_cmd">
+<parameter name="command">git add . && git commit -m "初始化提交：完成基础导航功能"</parameter>
+<parameter name="explanation">添加所有文件并进行首次提交</parameter>
+<parameter name="is_background">false</parameter>
+<parameter name="require_user_approval">true</parameter>
+</invoke>
+
+<invoke name="run_terminal_cmd">
+<parameter name="command">git remote add origin https://github.com/AuceptinFang/Happy-New-Year.git</parameter>
+<parameter name="explanation">添加 GitHub 远程仓库</parameter>
+<parameter name="is_background">false</parameter>
+<parameter name="require_user_approval">true</parameter>
+</invoke>
+
+<invoke name="run_terminal_cmd">
+<parameter name="command">git push -u origin main</parameter>
+<parameter name="explanation">推送代码到 GitHub 远程仓库的 main 分支</parameter>
+<parameter name="is_background">false</parameter>
+<parameter name="require_user_approval">true</parameter>
+</invoke>
