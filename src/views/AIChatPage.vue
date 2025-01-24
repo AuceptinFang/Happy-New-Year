@@ -10,13 +10,13 @@
       <h1 class="title">AI 解谜助手</h1>
       <div class="story-section">
         <div class="story-card">
-          <p class="story-text">穿过大门后，你遇到了一位神秘的守门人...</p>
-          <p class="story-text">他似乎知道通往下一关的密钥，但需要考验你的诚意。</p>
+          <p class="story-text">你遇到了一位神秘的守门人...</p>
+          <p class="story-text">他似乎知道通往下一关的密钥，试着和他聊聊吧。</p>
         </div>
       </div>
       <div class="chat-messages" ref="chatMessages">
         <div v-if="messages.length === 0" class="welcome-message">
-          你可以向我询问任何问题，我会给你一些提示...
+          你可以向我询问任何问题，但我不会给你提示...
         </div>
         <div v-for="(msg, index) in messages" :key="index">
           <div v-if="msg.role === 'user'" class="message user-message">
