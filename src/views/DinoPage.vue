@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleGameAreaClick" @touchstart="handleGameAreaClick">
+  <div class="game-container" :class="{ 'dark-theme': isDarkMode }">
     <div class="dino-game">
       <button class="theme-toggle" @click.stop="toggleTheme">
         <div class="toggle-icon">
@@ -11,34 +11,49 @@
         <div class="score">得分: {{ score }}</div>
         <div class="high-score">最高分: {{ highScore }}</div>
       </div>
+
+      <!-- 游戏区域 -->
       <div class="game-area" ref="gameArea">
+        <!-- 游戏画布 -->
+        <div class="game-canvas" @click="handleGameClick" @touchstart="handleGameClick">
+          <div 
+            class="dino" 
+            :class="{ 'jump': isJumping }"
+            :style="{ transform: `translateY(-${dinoBottom}px)` }"
+          >
+            <div class="dino-eye"></div>
+          </div>
+          <div 
+            v-for="(obstacle, index) in obstacles" 
+            :key="index" 
+            class="obstacle"
+            :class="obstacle.type"
+            :style="{ 
+              transform: `translateX(${obstacle.position}px)`,
+              height: obstacle.height + 'px',
+              width: obstacle.width + 'px',
+              bottom: obstacle.bottom + 'px'
+            }"
+          ></div>
+          <div class="ground"></div>
+        </div>
+
+        <!-- 开始界面 -->
         <div class="story-text" v-if="!gameStarted">
           <h2>前方危险！</h2>
           <p>穿过大门后，你发现前方有无数奇怪的图形朝你冲来！</p>
           <p>按空格键或点击屏幕可以跳跃，躲避障碍物。</p>
           <button class="start-game-btn" @click.stop="startGameWithStory">开始挑战</button>
         </div>
-        <div 
-          class="dino" 
-          :class="{ 'jump': isJumping }"
-          :style="{ transform: `translateY(-${dinoBottom}px)` }"
-        >
-          <div class="dino-eye"></div>
+
+        <!-- 游戏结束界面 -->
+        <div v-if="isGameOver" class="game-over">
+          <h2>游戏结束</h2>
+          <p>得分: {{ score }}</p>
+          <button @click.stop="resetGame" class="restart-btn">重新开始</button>
         </div>
-        <div 
-          v-for="(obstacle, index) in obstacles" 
-          :key="index" 
-          class="obstacle"
-          :class="obstacle.type"
-          :style="{ 
-            transform: `translateX(${obstacle.position}px)`,
-            height: obstacle.height + 'px',
-            width: obstacle.width + 'px',
-            bottom: obstacle.bottom + 'px'
-          }"
-        ></div>
-        <div class="ground"></div>
-        
+
+        <!-- 云朵按钮 -->
         <router-link to="/name" class="cloud-button-container">
           <div class="cloud-button">
             <div class="cloud-body">
@@ -50,12 +65,6 @@
             </div>
           </div>
         </router-link>
-      </div>
-      
-      <div v-if="isGameOver" class="game-over">
-        <h2>游戏结束</h2>
-        <p>得分: {{ score }}</p>
-        <button @click.stop="resetGame" class="restart-btn">重新开始</button>
       </div>
     </div>
   </div>
@@ -226,20 +235,21 @@ const spawnObstacles = () => {
   spawn()
 }
 
-const handleGameAreaClick = (event) => {
-  // 如果点击的是按钮或者游戏还没开始，不触发跳跃
+const handleGameClick = (event) => {
+  // 如果点击的是按钮或其他UI元素，不触发跳跃
   if (
     event.target.closest('.start-game-btn') || 
     event.target.closest('.restart-btn') || 
-    !gameStarted.value
+    event.target.closest('.cloud-button-container') ||
+    event.target.closest('.theme-toggle') ||
+    !gameStarted.value ||
+    isGameOver.value
   ) {
     return
   }
   
   event.preventDefault()
-  if (!isGameOver.value) {
-    jump()
-  }
+  jump()
 }
 
 const toggleTheme = () => {
@@ -247,8 +257,11 @@ const toggleTheme = () => {
 }
 
 const startGameWithStory = () => {
-  gameStarted.value = true
-  startGame()
+  // 3秒后自动开始游戏
+  setTimeout(() => {
+    gameStarted.value = true
+    startGame()
+  }, 3000)
 }
 
 onMounted(() => {
@@ -330,6 +343,15 @@ onUnmounted(() => {
   height: 100%;
   position: relative;
   touch-action: manipulation;  /* 优化移动端触摸体验 */
+}
+
+.game-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .dino {
@@ -648,7 +670,7 @@ onUnmounted(() => {
 }
 
 .story-text {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -659,7 +681,6 @@ onUnmounted(() => {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   width: min(400px, 80%);
   z-index: 1000;
-  pointer-events: auto;
 }
 
 .story-text h2 {
@@ -677,7 +698,29 @@ onUnmounted(() => {
 
 .start-game-btn, .restart-btn {
   position: relative;
+  margin-top: 1rem;
+  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  transition: all 0.3s;
   z-index: 1001;
-  pointer-events: auto;
+}
+
+.start-game-btn:hover,
+.restart-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2980b9 0%, #2472a4 100%);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* 确保所有UI元素在游戏画布之上 */
+.theme-toggle,
+.score-board,
+.cloud-button-container {
+  z-index: 1000;
 }
 </style> 
