@@ -2,7 +2,8 @@
 node_modules
 .DS_Store
 
-
+#编译文件
+dist
 
 # 本地环境文件
 *.local
