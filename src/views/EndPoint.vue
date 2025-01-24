@@ -1,7 +1,7 @@
 <template>
   <div class="end-point">
     <div class="celebration">
-      <div class="dragon"></div>
+      <div class="snake"></div>
       <div class="confetti-container">
         <div class="confetti" v-for="n in 20" :key="n"></div>
       </div>
@@ -54,6 +54,7 @@ export default {
   border-radius: 20px;
   position: relative;
   z-index: 2;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
 }
 
 .title {
@@ -178,17 +179,17 @@ export default {
 .confetti:nth-child(19) { left: 95%; animation-delay: -2.0s; animation-duration: 3.2s; }
 .confetti:nth-child(20) { left: 100%; animation-delay: -1.7s; animation-duration: 2.6s; }
 
-.dragon {
+.snake {
   position: absolute;
   top: 20px;
   right: -100px;
   width: 200px;
   height: 100px;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M10,25 Q30,0 50,25 T90,25" fill="none" stroke="%23ffd700" stroke-width="3"/></svg>') no-repeat;
-  animation: dragon-float 10s infinite ease-in-out;
+  animation: snake-float 10s infinite ease-in-out;
 }
 
-@keyframes dragon-float {
+@keyframes snake-float {
   0% {
     transform: translateX(0) rotate(0deg);
   }

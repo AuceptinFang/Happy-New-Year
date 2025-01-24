@@ -471,37 +471,37 @@ onMounted(() => {
 .container {
   max-width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
   font-family: 'Microsoft YaHei', sans-serif;
   position: relative;
-  padding: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 3vw, 2rem) 0;
 }
 
 .content-wrapper {
   max-width: min(800px, 95%);
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: clamp(15px, 3vw, 20px);
+  box-shadow: 0 10px 30px rgba(196, 30, 58, 0.1);
 }
 
 h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: #c41e3a;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   text-shadow: 2px 2px 4px rgba(196, 30, 58, 0.1);
 }
 
 .story-section {
-  margin-bottom: 3rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
 }
 
 .story-card {
   background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(10px, 2vw, 15px);
   box-shadow: 0 8px 32px rgba(196, 30, 58, 0.1);
   text-align: center;
 }
@@ -515,52 +515,76 @@ h1 {
 
 .story-text {
   color: #333;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   line-height: 1.8;
-  margin: 0.8rem 0;
+  margin: clamp(0.5rem, 1.5vw, 0.8rem) 0;
 }
 
 .form-group {
-  margin-bottom: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
   background: #fff;
-  padding: 1.5rem;
-  border-radius: 15px;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border-radius: clamp(10px, 2vw, 15px);
   box-shadow: 0 4px 6px rgba(196, 30, 58, 0.1);
 }
 
-.form-label {
+label {
   display: block;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.form-input {
-  width: 100%;
-  padding: clamp(0.8rem, 2vw, 1.2rem);
-  border: 2px solid #dee2e6;
-  border-radius: 10px;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  transition: all 0.3s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
 }
 
 .date-inputs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 1rem;
 }
 
-.date-select {
-  padding: clamp(0.8rem, 2vw, 1.2rem);
-  border: 2px solid #dee2e6;
-  border-radius: 10px;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+.date-inputs select {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.date-inputs select:hover {
+  border-color: #c41e3a;
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #c41e3a;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+}
+
+.zodiac-display {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  background: #fff5f5;
+  padding: 0.8rem;
+  border-radius: 8px;
+}
+
+.zodiac-text {
+  color: #c41e3a;
+  font-weight: bold;
+  margin-left: 0.5rem;
 }
 
 .submit-btn {
@@ -714,27 +738,9 @@ h1 {
 }
 
 @media (max-width: 768px) {
-  .date-inputs {
-    grid-template-columns: 1fr;
-  }
-
-  .submit-btn {
-    width: 90%;
-  }
-
-  .bagua-container {
-    width: 200px;
-    height: 200px;
-  }
-}
-
-@media (max-width: 480px) {
   .content-wrapper {
     padding: 1rem;
-  }
-  
-  h1 {
-    font-size: 2rem;
+    margin: 0.5rem;
   }
   
   .date-inputs {
@@ -742,8 +748,72 @@ h1 {
     gap: 0.5rem;
   }
   
+  .date-inputs select {
+    width: 100%;
+    padding: 0.8rem;
+  }
+  
   #chineseName {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    margin: 1rem 0;
+  }
+  
+  .explanation-box {
+    padding: 1rem;
+  }
+  
+  #nameExplanation {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  }
+  
+  .next-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem 0;
+  }
+  
+  .content-wrapper {
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .story-card {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .zodiac-display {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+  
+  .submit-btn {
+    padding: 0.8rem;
+    font-size: 1.1rem;
+  }
+  
+  #result {
+    margin-top: 1.5rem;
+  }
+  
+  .bagua-container svg {
+    width: 250px;
+    height: 250px;
   }
 }
 </style> 

@@ -263,43 +263,63 @@ onUnmounted(() => {
 
 <style scoped>
 .game-container {
-  width: min(1200px, 95%);
-  height: min(600px, 50vh);
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加背景动画效果 */
+.game-container::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.2) 0%, transparent 10%);
+  animation: floatingLight 10s infinite linear;
+}
+
+@keyframes floatingLight {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.dino-game {
+  width: min(1000px, 95%);
+  height: min(400px, 50vh);
   background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  margin: clamp(1rem, 3vw, 2rem) auto;
-}
-
-.dino-game {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
-  padding: clamp(1rem, 3vw, 2rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
+  border: none;
 }
 
 .score-board {
   position: absolute;
-  top: clamp(1rem, 3vw, 2rem);
-  right: clamp(1rem, 3vw, 2rem);
+  top: 20px;
+  right: 80px;
   font-family: 'Courier New', monospace;
   z-index: 10;
   background: rgba(255, 255, 255, 0.9);
-  padding: clamp(0.5rem, 2vw, 1rem);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: clamp(0.5rem, 1.5vw, 1rem);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 .score, .high-score {
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: 18px;
   margin: 5px 0;
-  color: #4a4a4a;
+  color: #2c3e50;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -310,15 +330,16 @@ onUnmounted(() => {
 }
 
 .dino {
-  width: clamp(40px, 8vw, 60px);
-  height: clamp(40px, 8vw, 60px);
-  background-color: #4a4a4a;
+  width: 40px;
+  height: 60px;
+  background: linear-gradient(135deg, #333 0%, #222 100%);
   position: absolute;
-  bottom: 0;
   left: 50px;
-  border-radius: 50%;
+  bottom: 0;
+  border-radius: 8px 8px 4px 4px;
   transition: transform 0.1s linear;
   will-change: transform;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dino-eye {
@@ -333,29 +354,26 @@ onUnmounted(() => {
 }
 
 .obstacle {
-  width: clamp(30px, 6vw, 40px);
-  height: clamp(30px, 6vw, 40px);
   position: absolute;
-  bottom: 0;
-  right: -50px;
-  transition: transform 0.1s linear;
   will-change: transform;
 }
 
-.obstacle.cactus {
-  background-color: #2d5a27;
-  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+.cactus {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.obstacle.rock {
-  background-color: #808080;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+.rock {
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.obstacle.bird {
-  background-color: #ff4d4d;
-  clip-path: polygon(0% 35%, 50% 0%, 100% 35%, 50% 100%);
-  bottom: 100px;
+.bird {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 50% 50% 0 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ground {
@@ -367,53 +385,52 @@ onUnmounted(() => {
 }
 
 .game-over {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: clamp(1rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.95);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 15px;
   text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
   width: min(300px, 80%);
-}
-
-.game-over h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  z-index: 1000;
 }
 
 .restart-btn {
+  margin-top: 1rem;
   padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  background: linear-gradient(45deg, #4169E1, #87CEEB);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: clamp(1rem, 3vw, 1.5rem);
+  transition: all 0.3s;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
 }
 
 .restart-btn:hover {
+  background: linear-gradient(135deg, #2980b9 0%, #2472a4 100%);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 
 .cloud-button-container {
   position: absolute;
-  top: clamp(1rem, 3vw, 2rem);
-  left: clamp(1rem, 3vw, 2rem);
+  top: 20px;
+  left: 20px;
   text-decoration: none;
   z-index: 10;
 }
 
 .cloud-button {
   position: relative;
-  width: clamp(40px, 8vw, 60px);
-  height: clamp(30px, 6vw, 40px);
+  width: 100px;
+  height: 60px;
   cursor: pointer;
   animation: floatAndRotate 8s infinite linear;
   filter: drop-shadow(0 5px 15px rgba(255, 255, 255, 0.4));
@@ -602,86 +619,72 @@ onUnmounted(() => {
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
+@media (max-width: 768px) {
+  .cloud-button-container {
+    top: 10px;
+    left: 10px;
+  }
+
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+  }
+
+  .score-board {
+    top: 10px;
+    right: 60px;
+  }
+
+  .story-text h2 {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+  }
+
+  .story-text p {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+  }
+}
+
 .story-text {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
-  padding: clamp(1.5rem, 4vw, 2rem);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: min(350px, 85%);
   z-index: 1000;
-  width: min(90%, 500px);
 }
 
 .story-text h2 {
   color: #ff4d4d;
-  margin-bottom: clamp(1rem, 3vw, 1.5rem);
-  font-size: clamp(1.5rem, 4vw, 1.8rem);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
 }
 
 .story-text p {
   color: #333;
-  margin: clamp(0.8rem, 2vw, 1rem) 0;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
   line-height: 1.6;
 }
 
 .start-game-btn {
-  margin-top: clamp(1.5rem, 4vw, 2rem);
-  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
   background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
   color: white;
   border: none;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: min(200px, 80%);
 }
 
 .start-game-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-  .game-container {
-    width: 95%;
-    height: min(400px, 50vh);
-  }
-
-  .story-text {
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .start-game-btn {
-    width: 100%;
-  }
-}
-
-/* 小屏幕适配 */
-@media (max-width: 480px) {
-  .game-container {
-    height: 50vh;
-  }
-
-  .game-over {
-    width: 90%;
-  }
-
-  .restart-btn {
-    width: 100%;
-  }
-
-  .cloud-button {
-    width: 40px;
-    height: 30px;
-  }
 }
 </style> 
