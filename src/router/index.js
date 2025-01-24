@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import StartPoint from '../views/StartPoint.vue'
 import GamePage from '../views/GamePage.vue'
 import PunishmentPage from '../views/PunishmentPage.vue'
+import AIChatPage from '../views/AIChatPage.vue'
+import SupportPage from '../views/SupportPage.vue'
+import DarkPage from '../views/DarkPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +23,21 @@ const router = createRouter({
       path: '/punishment',
       name: 'punishment',
       component: PunishmentPage
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: AIChatPage
+    },
+    {
+      path: '/support',
+      name: 'support',
+      component: SupportPage
+    },
+    {
+      path: '/dark',
+      name: 'dark',
+      component: DarkPage
     }
   ]
 })
