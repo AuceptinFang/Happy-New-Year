@@ -2,9 +2,7 @@
 node_modules
 .DS_Store
 
-# 构建输出
-dist
-dist-ssr
+
 
 # 本地环境文件
 *.local
