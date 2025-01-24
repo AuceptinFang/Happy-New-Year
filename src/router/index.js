@@ -7,7 +7,7 @@ import SupportPage from '../views/SupportPage.vue'
 import DarkPage from '../views/DarkPage.vue'
 import DinoPage from '../views/DinoPage.vue'
 import NamePage from '../views/NamePage.vue'
-import endpoint from '../views/endpoint.vue'
+import EndPoint from '../views/EndPoint.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -55,7 +55,7 @@ const router = createRouter({
     {
       path: '/endpoint',
       name: 'endpoint',
-      component: endpoint
+      component: EndPoint
     }
   ]
 })
