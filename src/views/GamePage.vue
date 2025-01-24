@@ -299,10 +299,37 @@ export default {
 }
 
 .story-text {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin: 0.8rem 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: #333;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 1.6;
+  margin: clamp(0.8rem, 2vw, 1rem) 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: clamp(1.5rem, 4vw, 2rem);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10;
+  max-width: min(600px, 90%);
+  margin: 0 auto;
+}
+
+.story-text h2 {
+  color: #ff4d4d;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story-text p {
+  margin: clamp(0.8rem, 2vw, 1rem) 0;
+  text-shadow: none;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .story-text {
+    padding: 1.2rem;
+    margin: 1rem;
+  }
 }
 </style> 

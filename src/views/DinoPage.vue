@@ -263,8 +263,8 @@ onUnmounted(() => {
 
 <style scoped>
 .game-container {
-  width: min(800px, 95%);
-  height: min(400px, 50vh);
+  width: min(1200px, 95%);
+  height: min(600px, 50vh);
   background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   position: relative;
@@ -603,41 +603,43 @@ onUnmounted(() => {
 }
 
 .story-text {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  z-index: 1000;
+  width: min(90%, 500px);
 }
 
 .story-text h2 {
   color: #ff4d4d;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1.5rem, 4vw, 1.8rem);
 }
 
 .story-text p {
   color: #333;
-  margin: 0.8rem 0;
-  font-size: 1.1rem;
+  margin: clamp(0.8rem, 2vw, 1rem) 0;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   line-height: 1.6;
 }
 
 .start-game-btn {
-  margin-top: 1.5rem;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
+  margin-top: clamp(1.5rem, 4vw, 2rem);
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
   color: white;
   border: none;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: min(200px, 80%);
 }
 
 .start-game-btn:hover {
@@ -648,16 +650,18 @@ onUnmounted(() => {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .game-container {
-    height: 60vh;
+    width: 95%;
+    height: min(400px, 50vh);
   }
 
-  .dino {
-    left: 30px;
+  .story-text {
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
-  .score {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
+  .start-game-btn {
+    width: 100%;
   }
 }
 

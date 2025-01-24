@@ -10,11 +10,12 @@
       <h1 class="title">恭喜通关！</h1>
       <div class="blessings">
         <p class="blessing-text">祝您新春快乐</p>
-        <p class="blessing-text">龙年大吉</p>
+        <p class="blessing-text">蛇年大吉</p>
         <p class="blessing-detail">愿您在新的一年里：</p>
         <ul class="blessing-list">
-          <li>事业腾飞 🐉</li>
+          <li>前程似锦 🌟</li>
           <li>身体健康 ⭐</li>
+          <li>万事胜意 🎉</li>
           <li>阖家欢乐 🏮</li>
         </ul>
       </div>
@@ -61,6 +62,7 @@ export default {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   margin-bottom: clamp(1.5rem, 4vw, 2rem);
   font-family: "Microsoft YaHei", sans-serif;
+  white-space: nowrap;
 }
 
 .blessings {
@@ -201,7 +203,16 @@ export default {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .content {
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    margin: 1rem;
+  }
+
+  .title {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+
+  .blessing-text {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
   }
 
   .back-btn {
