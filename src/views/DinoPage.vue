@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleInteraction" @touchstart="handleInteraction">
+  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleGameAreaClick" @touchstart="handleGameAreaClick">
     <div class="dino-game">
       <button class="theme-toggle" @click.stop="toggleTheme">
         <div class="toggle-icon">
@@ -16,7 +16,7 @@
           <h2>前方危险！</h2>
           <p>穿过大门后，你发现前方有无数奇怪的图形朝你冲来！</p>
           <p>按空格键或点击屏幕可以跳跃，躲避障碍物。</p>
-          <button class="start-game-btn" @click="startGameWithStory">开始挑战</button>
+          <button class="start-game-btn" @click.stop="startGameWithStory">开始挑战</button>
         </div>
         <div 
           class="dino" 
@@ -226,14 +226,16 @@ const spawnObstacles = () => {
   spawn()
 }
 
-const handleKeyPress = (event) => {
-  if (event.code === 'Space') {
-    event.preventDefault()
-    jump()
+const handleGameAreaClick = (event) => {
+  // 如果点击的是按钮或者游戏还没开始，不触发跳跃
+  if (
+    event.target.closest('.start-game-btn') || 
+    event.target.closest('.restart-btn') || 
+    !gameStarted.value
+  ) {
+    return
   }
-}
-
-const handleInteraction = (event) => {
+  
   event.preventDefault()
   if (!isGameOver.value) {
     jump()
@@ -327,6 +329,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   position: relative;
+  touch-action: manipulation;  /* 优化移动端触摸体验 */
 }
 
 .dino {
@@ -645,7 +648,7 @@ onUnmounted(() => {
 }
 
 .story-text {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -654,37 +657,27 @@ onUnmounted(() => {
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: min(350px, 85%);
+  width: min(400px, 80%);
   z-index: 1000;
+  pointer-events: auto;
 }
 
 .story-text h2 {
-  color: #ff4d4d;
+  color: #2c3e50;
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
   margin-bottom: 1rem;
-  font-size: 1.8rem;
 }
 
 .story-text p {
-  color: #333;
-  margin: 0.8rem 0;
-  font-size: 1.1rem;
+  color: #34495e;
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
   line-height: 1.6;
+  margin: 0.5rem 0;
 }
 
-.start-game-btn {
-  margin-top: 1.5rem;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.start-game-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+.start-game-btn, .restart-btn {
+  position: relative;
+  z-index: 1001;
+  pointer-events: auto;
 }
 </style> 
