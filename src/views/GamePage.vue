@@ -2,6 +2,10 @@
   <div class="game-page">
     <div class="content">
       <div class="question-container">
+        <div class="story-text">
+          <p>终于，你来到了最后一关...</p>
+          <p>解开这道数学题，出口似乎就在眼前。</p>
+        </div>
         <h2 class="question-title">解答下面的数学题：</h2>
         <div class="question-image">
           <img src="/images/1737707617386.jpg" alt="数学题" class="math-image">
@@ -111,6 +115,19 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.story-text {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1976d2;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(25, 118, 210, 0.1);
+}
+
+.story-text p {
+  margin: 0.5rem 0;
 }
 
 .question-title {

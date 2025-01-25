@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container" :class="{ 'dark-theme': isDarkMode }">
+  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleGameClick" @touchstart="handleGameClick">
     <div class="dino-game">
       <button class="theme-toggle" @click.stop="toggleTheme">
         <div class="toggle-icon">
@@ -11,49 +11,34 @@
         <div class="score">得分: {{ score }}</div>
         <div class="high-score">最高分: {{ highScore }}</div>
       </div>
-
-      <!-- 游戏区域 -->
       <div class="game-area" ref="gameArea">
-        <!-- 游戏画布 -->
-        <div class="game-canvas" @click="handleGameClick" @touchstart="handleGameClick">
-          <div 
-            class="dino" 
-            :class="{ 'jump': isJumping }"
-            :style="{ transform: `translateY(-${dinoBottom}px)` }"
-          >
-            <div class="dino-eye"></div>
-          </div>
-          <div 
-            v-for="(obstacle, index) in obstacles" 
-            :key="index" 
-            class="obstacle"
-            :class="obstacle.type"
-            :style="{ 
-              transform: `translateX(${obstacle.position}px)`,
-              height: obstacle.height + 'px',
-              width: obstacle.width + 'px',
-              bottom: obstacle.bottom + 'px'
-            }"
-          ></div>
-          <div class="ground"></div>
-        </div>
-
-        <!-- 开始界面 -->
         <div class="story-text" v-if="!gameStarted">
           <h2>前方危险！</h2>
           <p>穿过大门后，你发现前方有无数奇怪的图形朝你冲来！</p>
           <p>按空格键或点击屏幕可以跳跃，躲避障碍物。</p>
-          <button class="start-game-btn" @click.stop="startGameWithStory">开始挑战</button>
+          <button class="start-game-btn" @click="startGameWithStory">开始挑战</button>
         </div>
-
-        <!-- 游戏结束界面 -->
-        <div v-if="isGameOver" class="game-over">
-          <h2>游戏结束</h2>
-          <p>得分: {{ score }}</p>
-          <button @click.stop="resetGame" class="restart-btn">重新开始</button>
+        <div 
+          class="dino" 
+          :class="{ 'jump': isJumping }"
+          :style="{ transform: `translateY(-${dinoBottom}px)` }"
+        >
+          <div class="dino-eye"></div>
         </div>
-
-        <!-- 云朵按钮 -->
+        <div 
+          v-for="(obstacle, index) in obstacles" 
+          :key="index" 
+          class="obstacle"
+          :class="obstacle.type"
+          :style="{ 
+            transform: `translateX(${obstacle.position}px)`,
+            height: obstacle.height + 'px',
+            width: obstacle.width + 'px',
+            bottom: obstacle.bottom + 'px'
+          }"
+        ></div>
+        <div class="ground"></div>
+        
         <router-link to="/name" class="cloud-button-container">
           <div class="cloud-button">
             <div class="cloud-body">
@@ -65,6 +50,12 @@
             </div>
           </div>
         </router-link>
+      </div>
+      
+      <div v-if="isGameOver" class="game-over">
+        <h2>游戏结束</h2>
+        <p>得分: {{ score }}</p>
+        <button @click.stop="resetGame" class="restart-btn">重新开始</button>
       </div>
     </div>
   </div>
@@ -192,6 +183,11 @@ const updateGame = () => {
       if (score.value > highScore.value) {
         highScore.value = score.value
       }
+      setTimeout(() => {
+        if (isGameOver.value) {
+          resetGame()
+        }
+      }, 3000)
       return
     }
 
@@ -235,6 +231,13 @@ const spawnObstacles = () => {
   spawn()
 }
 
+const handleKeyPress = (event) => {
+  if (event.code === 'Space') {
+    event.preventDefault()
+    jump()
+  }
+}
+
 const handleGameClick = (event) => {
   // 如果点击的是按钮或其他UI元素，不触发跳跃
   if (
@@ -257,15 +260,12 @@ const toggleTheme = () => {
 }
 
 const startGameWithStory = () => {
-  // 3秒后自动开始游戏
-  setTimeout(() => {
-    gameStarted.value = true
-    startGame()
-  }, 3000)
+  gameStarted.value = true
+  startGame()
 }
 
 onMounted(() => {
-  // 不要立即开始游戏，等待用户点击开始按钮
+  // 不要立即开始游戏，等待用户点击开始按钮或3秒后自动开始
   window.addEventListener('keydown', handleKeyPress)
   setTimeout(() => {
     if (!gameStarted.value) {
@@ -331,10 +331,9 @@ onUnmounted(() => {
   font-family: 'Courier New', monospace;
   z-index: 10;
   background: rgba(255, 255, 255, 0.9);
-  padding: clamp(0.5rem, 1.5vw, 1rem);
+  padding: 10px 15px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 .score, .high-score {
@@ -348,16 +347,6 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   position: relative;
-  touch-action: manipulation;  /* 优化移动端触摸体验 */
-}
-
-.game-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
 }
 
 .dino {
@@ -416,30 +405,28 @@ onUnmounted(() => {
 }
 
 .game-over {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: 2rem;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
-  width: min(300px, 80%);
-  z-index: 1000;
 }
 
 .restart-btn {
   margin-top: 1rem;
-  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  padding: 0.8rem 1.5rem;
   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: 16px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
 }
@@ -650,6 +637,7 @@ onUnmounted(() => {
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
+/* 移动端适配 */
 @media (max-width: 768px) {
   .cloud-button-container {
     top: 10px;
@@ -664,69 +652,110 @@ onUnmounted(() => {
   .score-board {
     top: 10px;
     right: 60px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .story-text {
+    width: 90%;
+    padding: 1rem;
   }
 
   .story-text h2 {
-    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-size: 1.4rem;
   }
 
   .story-text p {
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    font-size: 1rem;
+  }
+
+  .start-game-btn, .restart-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .dino-game {
+    height: 60vh;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .game-container {
+    padding: 0.5rem;
+  }
+
+  .dino-game {
+    width: 98%;
+    height: 70vh;
+  }
+
+  .score-board {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .cloud-button {
+    transform: scale(0.8);
+  }
+
+  .theme-toggle {
+    transform: scale(0.8);
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .dino-game {
+    height: 80vh;
+  }
+
+  .story-text {
+    max-height: 80vh;
+    overflow-y: auto;
   }
 }
 
 .story-text {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: 2rem;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: min(400px, 80%);
-  z-index: 1000;
+  z-index: 100;
 }
 
 .story-text h2 {
-  color: #2c3e50;
-  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  color: #ff4d4d;
   margin-bottom: 1rem;
+  font-size: 1.8rem;
 }
 
 .story-text p {
-  color: #34495e;
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: #333;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
   line-height: 1.6;
-  margin: 0.5rem 0;
 }
 
-.start-game-btn, .restart-btn {
-  position: relative;
-  margin-top: 1rem;
-  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+.start-game-btn {
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 30px;
   cursor: pointer;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  transition: all 0.3s;
-  z-index: 1001;
+  transition: all 0.3s ease;
 }
 
-.start-game-btn:hover,
-.restart-btn:hover {
+.start-game-btn:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #2980b9 0%, #2472a4 100%);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-}
-
-/* 确保所有UI元素在游戏画布之上 */
-.theme-toggle,
-.score-board,
-.cloud-button-container {
-  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
 }
 </style> 
