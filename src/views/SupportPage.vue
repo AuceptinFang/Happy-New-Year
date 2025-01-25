@@ -42,15 +42,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: clamp(1rem, 3vw, 2rem);
   position: relative;
   overflow: hidden;
 }
 
 .content {
-  max-width: 600px;
+  max-width: min(800px, 95%);
+  width: 100%;
   background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -60,39 +61,39 @@
 
 .title {
   color: #ff1493;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message-box {
   background: rgba(255, 192, 203, 0.2);
-  padding: 2rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
   border-radius: 15px;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
 }
 
 .praise {
   color: #ff1493;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   margin-bottom: 1rem;
 }
 
 .hint {
   color: #666;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   margin-bottom: 1.5rem;
 }
 
 .secret {
   background: rgba(255, 20, 147, 0.1);
-  padding: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
   border-radius: 10px;
   margin: 1rem 0;
 }
 
 .key-text {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   color: #ff1493;
   font-weight: bold;
   margin: 1rem 0;
@@ -101,20 +102,22 @@
 .key-meaning {
   color: #666;
   font-style: italic;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
 .qrcode-section {
-  margin: 2rem 0;
+  margin: clamp(1.5rem, 4vw, 2rem) 0;
 }
 
 .support-text {
   color: #666;
   margin-bottom: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
 .qrcode-placeholder {
-  width: 200px;
-  height: 200px;
+  width: min(200px, 80%);
+  height: min(200px, 80vw);
   background: rgba(0, 0, 0, 0.1);
   margin: 1rem auto;
   display: flex;
@@ -124,8 +127,8 @@
 }
 
 .return-btn {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
+  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   background: linear-gradient(45deg, #ff1493, #ff69b4);
   color: white;
   border: none;
@@ -149,8 +152,8 @@
 
 .heart {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: clamp(15px, 4vw, 20px);
+  height: clamp(15px, 4vw, 20px);
   background: rgba(255, 255, 255, 0.6);
   transform: rotate(45deg);
   animation: floatHeart 4s infinite ease-in-out;
@@ -160,8 +163,8 @@
 .heart::after {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.6);
 }
@@ -229,4 +232,45 @@
 .star:nth-child(8) { right: 25%; top: 50%; animation-delay: 1.4s; }
 .star:nth-child(9) { right: 35%; top: 70%; animation-delay: 1.6s; }
 .star:nth-child(10) { right: 45%; top: 90%; animation-delay: 1.8s; }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem;
+  }
+
+  .message-box {
+    padding: 1rem;
+  }
+
+  .secret {
+    padding: 1rem;
+  }
+
+  .hearts {
+    display: none;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .key-text {
+    font-size: 1.5rem;
+  }
+
+  .return-btn {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+}
 </style> 

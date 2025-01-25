@@ -127,39 +127,39 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .content {
-  max-width: 600px;
+  max-width: min(800px, 95%);
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .text-section {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
 }
 
 .story-text {
   color: #ff4d4d;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   line-height: 1.6;
   margin: 1rem 0;
   text-shadow: 1px 1px 2px rgba(255, 77, 77, 0.2);
 }
 
 .text-container {
-  min-height: 200px;
-  margin-bottom: 2rem;
+  min-height: clamp(150px, 30vh, 300px);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .punishment-text {
   color: #ff4d4d;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
   margin: 1rem 0;
   text-align: center;
   opacity: 0;
@@ -169,14 +169,17 @@ export default {
 
 .punishment-btn {
   width: 100%;
-  padding: 1rem;
-  font-size: 1.2rem;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   background: linear-gradient(45deg, #ff4d4d, #ff8c1a);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: block;
 }
 
 .punishment-btn:not(.disabled):hover {
@@ -198,6 +201,32 @@ export default {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem;
+  }
+
+  .text-container {
+    min-height: 200px;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .text-container {
+    min-height: 150px;
+  }
+
+  .punishment-btn {
+    width: 90%;
   }
 }
 
