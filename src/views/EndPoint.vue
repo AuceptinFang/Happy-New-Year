@@ -1,7 +1,7 @@
 <template>
   <div class="end-point">
     <div class="celebration">
-      <div class="dragon"></div>
+      <div class="snake"></div>
       <div class="confetti-container">
         <div class="confetti" v-for="n in 20" :key="n"></div>
       </div>
@@ -10,11 +10,12 @@
       <h1 class="title">恭喜通关！</h1>
       <div class="blessings">
         <p class="blessing-text">祝您新春快乐</p>
-        <p class="blessing-text">龙年大吉</p>
+        <p class="blessing-text">蛇年大吉</p>
         <p class="blessing-detail">愿您在新的一年里：</p>
         <ul class="blessing-list">
-          <li>事业腾飞 🐉</li>
+          <li>前程似锦 🌟</li>
           <li>身体健康 ⭐</li>
+          <li>万事胜意 🎉</li>
           <li>阖家欢乐 🏮</li>
         </ul>
       </div>
@@ -35,7 +36,7 @@ export default {
 .end-point {
   min-height: 100vh;
   background: linear-gradient(135deg, #ff1a1a 0%, #ff8c1a 100%);
-  padding: 20px;
+  padding: clamp(1rem, 3vw, 2rem);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -45,36 +46,39 @@ export default {
 }
 
 .content {
+  max-width: min(800px, 95%);
+  width: 100%;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  padding: 3rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 20px;
   position: relative;
   z-index: 2;
-  max-width: 600px;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
 }
 
 .title {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   color: #ffd700;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
   font-family: "Microsoft YaHei", sans-serif;
+  white-space: nowrap;
 }
 
 .blessings {
-  margin: 2rem 0;
+  margin: clamp(1.5rem, 4vw, 2rem) 0;
 }
 
 .blessing-text {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 4vw, 2rem);
   color: #fff;
   margin: 1rem 0;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .blessing-detail {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   color: #ffd700;
   margin: 1.5rem 0 1rem;
 }
@@ -86,15 +90,15 @@ export default {
 }
 
 .blessing-list li {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 3vw, 1.3rem);
   color: #fff;
   margin: 0.8rem 0;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .back-btn {
-  padding: 15px 40px;
-  font-size: 1.2rem;
+  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   background: linear-gradient(45deg, #ffd700, #ffb700);
   color: #d4380d;
   border: none;
@@ -102,6 +106,10 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  display: block;
+  max-width: 300px;
+  width: 100%;
 }
 
 .back-btn:hover {
@@ -121,8 +129,8 @@ export default {
 
 .confetti {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: clamp(5px, 1.5vw, 10px);
+  height: clamp(5px, 1.5vw, 10px);
   background: #ffd700;
   animation: confetti-fall 3s linear infinite;
 }
@@ -171,17 +179,17 @@ export default {
 .confetti:nth-child(19) { left: 95%; animation-delay: -2.0s; animation-duration: 3.2s; }
 .confetti:nth-child(20) { left: 100%; animation-delay: -1.7s; animation-duration: 2.6s; }
 
-.dragon {
+.snake {
   position: absolute;
   top: 20px;
   right: -100px;
   width: 200px;
   height: 100px;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M10,25 Q30,0 50,25 T90,25" fill="none" stroke="%23ffd700" stroke-width="3"/></svg>') no-repeat;
-  animation: dragon-float 10s infinite ease-in-out;
+  animation: snake-float 10s infinite ease-in-out;
 }
 
-@keyframes dragon-float {
+@keyframes snake-float {
   0% {
     transform: translateX(0) rotate(0deg);
   }
@@ -190,6 +198,50 @@ export default {
   }
   100% {
     transform: translateX(0) rotate(0deg);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .content {
+    padding: clamp(1rem, 3vw, 1.5rem);
+    margin: 1rem;
+  }
+
+  .title {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+
+  .blessing-text {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+  }
+
+  .back-btn {
+    width: 90%;
+  }
+
+  .confetti {
+    display: none;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .blessing-text {
+    font-size: 1.5rem;
+  }
+
+  .blessing-list li {
+    font-size: 1.1rem;
   }
 }
 </style> 

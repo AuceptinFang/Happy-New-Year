@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleInteraction" @touchstart="handleInteraction">
+  <div class="game-container" :class="{ 'dark-theme': isDarkMode }" @click="handleGameClick" @touchstart="handleGameClick">
     <div class="dino-game">
       <button class="theme-toggle" @click.stop="toggleTheme">
         <div class="toggle-icon">
@@ -183,6 +183,11 @@ const updateGame = () => {
       if (score.value > highScore.value) {
         highScore.value = score.value
       }
+      setTimeout(() => {
+        if (isGameOver.value) {
+          resetGame()
+        }
+      }, 3000)
       return
     }
 
@@ -233,11 +238,21 @@ const handleKeyPress = (event) => {
   }
 }
 
-const handleInteraction = (event) => {
-  event.preventDefault()
-  if (!isGameOver.value) {
-    jump()
+const handleGameClick = (event) => {
+  // 如果点击的是按钮或其他UI元素，不触发跳跃
+  if (
+    event.target.closest('.start-game-btn') || 
+    event.target.closest('.restart-btn') || 
+    event.target.closest('.cloud-button-container') ||
+    event.target.closest('.theme-toggle') ||
+    !gameStarted.value ||
+    isGameOver.value
+  ) {
+    return
   }
+  
+  event.preventDefault()
+  jump()
 }
 
 const toggleTheme = () => {
@@ -250,8 +265,14 @@ const startGameWithStory = () => {
 }
 
 onMounted(() => {
-  // 不要立即开始游戏，等待用户点击开始按钮
+  // 不要立即开始游戏，等待用户点击开始按钮或3秒后自动开始
   window.addEventListener('keydown', handleKeyPress)
+  setTimeout(() => {
+    if (!gameStarted.value) {
+      gameStarted.value = true
+      startGame()
+    }
+  }, 3000)
 })
 
 onUnmounted(() => {
@@ -264,23 +285,43 @@ onUnmounted(() => {
 <style scoped>
 .game-container {
   width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  padding: clamp(1rem, 3vw, 2rem);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加背景动画效果 */
+.game-container::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.2) 0%, transparent 10%);
+  animation: floatingLight 10s infinite linear;
+}
+
+@keyframes floatingLight {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 .dino-game {
-  width: 800px;
-  height: 300px;
-  border: 2px solid #333;
+  width: min(1000px, 95%);
+  height: min(400px, 50vh);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
   position: relative;
   overflow: hidden;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: none;
 }
 
 .score-board {
@@ -596,10 +637,82 @@ onUnmounted(() => {
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
-@media (max-width: 900px) {
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .cloud-button-container {
+    top: 10px;
+    left: 10px;
+  }
+
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+  }
+
+  .score-board {
+    top: 10px;
+    right: 60px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .story-text {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  .story-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .story-text p {
+    font-size: 1rem;
+  }
+
+  .start-game-btn, .restart-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
   .dino-game {
-    width: 90vw;
-    height: 200px;
+    height: 60vh;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .game-container {
+    padding: 0.5rem;
+  }
+
+  .dino-game {
+    width: 98%;
+    height: 70vh;
+  }
+
+  .score-board {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .cloud-button {
+    transform: scale(0.8);
+  }
+
+  .theme-toggle {
+    transform: scale(0.8);
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .dino-game {
+    height: 80vh;
+  }
+
+  .story-text {
+    max-height: 80vh;
+    overflow-y: auto;
   }
 }
 

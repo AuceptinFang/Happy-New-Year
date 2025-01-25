@@ -474,34 +474,34 @@ onMounted(() => {
   background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
   font-family: 'Microsoft YaHei', sans-serif;
   position: relative;
-  padding: 2rem 0;
+  padding: clamp(1rem, 3vw, 2rem) 0;
 }
 
 .content-wrapper {
-  max-width: 800px;
+  max-width: min(800px, 95%);
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
+  border-radius: clamp(15px, 3vw, 20px);
   box-shadow: 0 10px 30px rgba(196, 30, 58, 0.1);
 }
 
 h1 {
   text-align: center;
   color: #c41e3a;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   text-shadow: 2px 2px 4px rgba(196, 30, 58, 0.1);
 }
 
 .story-section {
-  margin-bottom: 3rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
 }
 
 .story-card {
   background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(10px, 2vw, 15px);
   box-shadow: 0 8px 32px rgba(196, 30, 58, 0.1);
   text-align: center;
 }
@@ -515,16 +515,16 @@ h1 {
 
 .story-text {
   color: #333;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   line-height: 1.8;
-  margin: 0.8rem 0;
+  margin: clamp(0.5rem, 1.5vw, 0.8rem) 0;
 }
 
 .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
   background: #fff;
-  padding: 1.5rem;
-  border-radius: 15px;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border-radius: clamp(10px, 2vw, 15px);
   box-shadow: 0 4px 6px rgba(196, 30, 58, 0.1);
 }
 
@@ -737,13 +737,10 @@ input:focus, select:focus {
   transform: translateX(5px);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .content-wrapper {
     padding: 1rem;
-  }
-  
-  h1 {
-    font-size: 2rem;
+    margin: 0.5rem;
   }
   
   .date-inputs {
@@ -751,8 +748,72 @@ input:focus, select:focus {
     gap: 0.5rem;
   }
   
+  .date-inputs select {
+    width: 100%;
+    padding: 0.8rem;
+  }
+  
   #chineseName {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    margin: 1rem 0;
+  }
+  
+  .explanation-box {
+    padding: 1rem;
+  }
+  
+  #nameExplanation {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  }
+  
+  .next-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem 0;
+  }
+  
+  .content-wrapper {
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .story-card {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .zodiac-display {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+  
+  .submit-btn {
+    padding: 0.8rem;
+    font-size: 1.1rem;
+  }
+  
+  #result {
+    margin-top: 1.5rem;
+  }
+  
+  .bagua-container svg {
+    width: 250px;
+    height: 250px;
   }
 }
 </style> 
