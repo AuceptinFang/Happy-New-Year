@@ -67,6 +67,8 @@ export default {
     }
 
     const checkAnswer = () => {
+      if (!selectedAnswer.value) return
+      
       answered.value = true
       isCorrect.value = selectedAnswer.value === 'D'
       

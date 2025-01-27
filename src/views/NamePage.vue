@@ -6,10 +6,10 @@
       <div class="story-section">
         <div class="story-card">
           <p class="story-text">注意到头顶上的云不对劲后，你机灵地逃了出来</p>
-          <p class="story-text">“这里是哪里？”抬起头，你看到了一块红色的牌子</p>
-          <p class="story-text">“TikTok被封禁以后，类似的奇奇怪怪的网站也多了起来”</p>
+          <p class="story-text">"这里是哪里？"抬起头，你看到了一块红色的牌子</p>
+          <p class="story-text">"TikTok被封禁以后，类似的奇奇怪怪的网站也多了起来"</p>
           <p class="story-text">你摇摇头，但是遏制不住好奇心：</p>
-          <p class="story-text">“如果，我是说如果，开发者没做异常输入处理呢...”</p>
+          <p class="story-text">"如果，我是说如果，开发者没做异常输入处理呢..."</p>
         </div>
       </div>
       
@@ -95,7 +95,7 @@
         <div class="explanation-box">
           <p id="nameExplanation">{{ nameExplanation }}</p>
         </div>
-        <router-link to="/game" class="next-btn">
+        <router-link to="/painting" class="next-btn">
           <span class="button-text">继续探索</span>
           <span class="button-icon">→</span>
         </router-link>
@@ -106,7 +106,9 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const englishName = ref('')
 const birthYear = ref('')
 const birthMonth = ref('')
@@ -329,65 +331,204 @@ const baguaSymbols = [
   { name: '兑', symbol: '☱', attribute: '泽' }
 ]
 
-function generateChineseName(englishName, birthdate, zodiac) {
-  const processedName = englishName.toLowerCase().replace(/\s+/g, '')
-  
-  // 选择姓氏（更灵活的选择）
-  const commonSurnames = {
-    single: ['李', '王', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴', '郑', '孙', '马', '朱', '胡', '林', '高', '何', '郭', '罗'],
-    double: ['欧阳', '司马', '诸葛', '南宫', '东方', '独孤', '慕容', '宇文', '上官', '夏侯']
+// 生成中文名字
+const generateChineseName = (englishName, birthdate, zodiac) => {
+  // 扩展姓氏谐音映射
+  const surnameMap = {
+    'a': ['安', '艾', '奥', '敖', '阿'],
+    'b': ['白', '包', '毕', '柏', '班', '鲍', '边', '卞'],
+    'c': ['陈', '蔡', '曹', '崔', '程', '常', '车', '成'],
+    'd': ['邓', '杜', '戴', '董', '丁', '窦', '刁', '段'],
+    'e': ['鄂', '尔', '恩', '耳', '鹅'],
+    'f': ['方', '范', '冯', '傅', '费', '樊', '符', '凤'],
+    'g': ['高', '郭', '龚', '顾', '耿', '关', '管', '甘'],
+    'h': ['黄', '胡', '何', '韩', '侯', '洪', '霍', '华'],
+    'i': ['伊', '易', '印', '翊', '益'],
+    'j': ['金', '江', '姜', '贾', '蒋', '纪', '季', '焦'],
+    'k': ['孔', '柯', '康', '寇', '开', '凯', '空', '蒯'],
+    'l': ['李', '刘', '林', '梁', '卢', '雷', '柳', '龙'],
+    'm': ['马', '孟', '毛', '莫', '梅', '苗', '穆', '牟'],
+    'n': ['倪', '聂', '宁', '南', '牛', '农', '能', '年'],
+    'o': ['欧', '欧阳', '鸥', '偶', '藕'],
+    'p': ['彭', '潘', '裴', '庞', '平', '蒲', '皮', '濮'],
+    'q': ['钱', '秦', '邱', '齐', '乔', '祁', '屈', '戚'],
+    'r': ['任', '阮', '饶', '荣', '冉', '容', '芮', '茹'],
+    's': ['孙', '宋', '苏', '沈', '史', '施', '邵', '尚'],
+    't': ['唐', '田', '陶', '汤', '谭', '涂', '童', '图'],
+    'u': ['乌', '万', '巫', '武', '吴'],
+    'v': ['文', '王', '魏', '卫', '韦'],
+    'w': ['王', '吴', '魏', '韦', '万', '翁', '卫', '温'],
+    'x': ['徐', '谢', '肖', '夏', '薛', '熊', '许', '向'],
+    'y': ['杨', '叶', '姚', '于', '袁', '尹', '易', '严'],
+    'z': ['张', '赵', '周', '郑', '朱', '钟', '邹', '詹']
   }
-  
-  // 根据随机概率选择单姓或双姓（80%概率选择单姓）
-  const surname = Math.random() < 0.8
-    ? commonSurnames.single[Math.floor(Math.random() * commonSurnames.single.length)]
-    : commonSurnames.double[Math.floor(Math.random() * commonSurnames.double.length)]
 
-  // 获取英文名首字母对应的中文音译
-  const firstChar = processedName[0]
-  const translitChar = nameMapping[firstChar] 
-    ? nameMapping[firstChar][Math.floor(Math.random() * nameMapping[firstChar].length)]
-    : '华'
-
-  // 获取星座特质
-  const zodiacTrait = zodiacTraits[zodiac].traits[Math.floor(Math.random() * zodiacTraits[zodiac].traits.length)]
-  
-  // 根据出生日期获取五行属性
-  const season = getSeason(birthdate)
-  const elementChar = elementMapping[season][Math.floor(Math.random() * elementMapping[season].length)]
-
-  // 生成名字（考虑单双姓情况）
-  const fullName = surname.length === 1
-    ? surname + translitChar + elementChar
-    : surname + zodiacTrait + elementChar
-
-  // 获取生肖
-  const birthYear = new Date(birthdate).getFullYear()
-  const zodiacAnimal = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'][(birthYear - 1900) % 12]
-
-  // 生成详细解释
-  const explanation = `
-    【姓氏寓意】
-    ${surname}氏${surname.length === 1 ? '单姓' : '双姓'}，源远流长。${
-      surname.length === 1 
-        ? '为中华姓氏之一，历史悠久，人才辈出。'
-        : '为中国传统复姓，典故深远，彰显尊贵。'
+  // 增强谐音处理
+  const getTransliteration = (name) => {
+    const pinyinMap = {
+      'a': ['安', '爱', '岸', '傲', '昂', '澳', '奥', '暗', '案', '按'],
+      'b': ['白', '柏', '博', '北', '冰', '百', '碧', '彬', '斌', '邦'],
+      'c': ['才', '昌', '晨', '辰', '诚', '畅', '超', '承', '澄', '纯'],
+      'd': ['德', '东', '大', '达', '道', '笛', '丹', '典', '栋', '定'],
+      'e': ['恩', '尔', '而', '儿', '耳', '鄂', '谔', '锷', '萼', '娥'],
+      'f': ['福', '芳', '方', '飞', '凡', '风', '帆', '枫', '峰', '丰'],
+      'g': ['高', '光', '国', '冠', '广', '功', '贵', '格', '耕', '根'],
+      'h': ['海', '浩', '宏', '皓', '瀚', '和', '翰', '航', '昊', '宏'],
+      'i': ['伊', '依', '易', '意', '逸', '毅', '翊', '熠', '懿', '奕'],
+      'j': ['佳', '嘉', '金', '锦', '俊', '杰', '晋', '景', '珺', '骏'],
+      'k': ['凯', '康', '开', '恺', '可', '昆', '铠', '锴', '楷', '魁'],
+      'l': ['乐', '立', '良', '澜', '朗', '灵', '岚', '莲', '琳', '露'],
+      'm': ['美', '明', '茂', '敏', '默', '梦', '漫', '曼', '蒙', '萌'],
+      'n': ['宁', '南', '年', '暖', '诺', '娜', '念', '凝', '宁', '楠'],
+      'o': ['欧', '鸥', '藕', '偶', '澳', '欢', '瓯', '鸥', '殴', '讴'],
+      'p': ['平', '佩', '培', '鹏', '沛', '朋', '蓬', '澎', '彭', '濮'],
+      'q': ['青', '清', '庆', '晴', '秋', '琴', '勤', '谦', '群', '奇'],
+      'r': ['瑞', '荣', '仁', '睿', '然', '润', '蕊', '蓉', '锐', '融'],
+      's': ['思', '顺', '善', '书', '舒', '盛', '诗', '双', '爽', '胜'],
+      't': ['天', '同', '泰', '涛', '堂', '腾', '霆', '亭', '廷', '棠'],
+      'u': ['宇', '玉', '雨', '羽', '语', '昱', '钰', '煜', '誉', '裕'],
+      'v': ['文', '威', '为', '伟', '维', '韦', '巍', '薇', '蔚', '魏'],
+      'w': ['维', '伟', '文', '卫', '闻', '蔚', '巍', '薇', '魏', '武'],
+      'x': ['晓', '欣', '新', '潇', '笑', '翔', '祥', '心', '星', '旭'],
+      'y': ['雅', '怡', '宜', '逸', '毅', '艺', '颖', '盈', '映', '莹'],
+      'z': ['子', '志', '智', '哲', '卓', '振', '正', '真', '臻', '忠']
     }
+
+    const firstLetter = englishName.toLowerCase()[0]
+    const secondLetter = englishName.toLowerCase()[1] || firstLetter
+    
+    // 随机打乱选择
+    const shuffle = arr => arr.sort(() => Math.random() - 0.5)
+    
+    const firstOptions = shuffle(pinyinMap[firstLetter] || ['德'])
+    const secondOptions = shuffle(pinyinMap[secondLetter] || ['福'])
+    
+    return firstOptions.map(first => ({
+      char: first,
+      meaning: getMeaning(first)
+    }))
+  }
+
+  // 获取字的含义
+  const getMeaning = (char) => {
+    const meanings = {
+      '安': '平安、安康', '爱': '慈爱、博爱', '岸': '高洁、坚定',
+      '白': '纯洁、光明', '柏': '挺拔、坚韧', '博': '博大、渊博',
+      '才': '才华、才智', '昌': '昌盛、兴旺', '晨': '晨曦、希望',
+      // ... 更多字的含义 ...
+    }
+    return meanings[char] || '寓意美好'
+  }
+
+  // 根据季节选择五行字
+  const getElementChars = (season) => {
+    const elements = {
+      spring: [
+        { char: '芽', meaning: '新生、希望' },
+        { char: '苗', meaning: '生长、向上' },
+        { char: '青', meaning: '生机、活力' },
+        { char: '翠', meaning: '青翠、美好' },
+        { char: '萌', meaning: '萌发、生机' },
+        { char: '蓉', meaning: '荣华、美好' },
+        { char: '茗', meaning: '茂盛、清雅' },
+        { char: '荷', meaning: '清净、高洁' },
+        { char: '莲', meaning: '纯洁、高雅' },
+        { char: '菡', meaning: '绚丽、优美' }
+      ],
+      summer: [
+        { char: '炎', meaning: '光明、温暖' },
+        { char: '焱', meaning: '光芒、热情' },
+        { char: '熙', meaning: '光明、和煦' },
+        { char: '晖', meaning: '光辉、灿烂' },
+        { char: '煜', meaning: '光明、璀璨' },
+        { char: '晗', meaning: '晨光、希望' },
+        { char: '曦', meaning: '旭日、光明' },
+        { char: '烨', meaning: '光耀、灿烂' },
+        { char: '炫', meaning: '绚丽、夺目' },
+        { char: '阳', meaning: '温暖、光明' }
+      ],
+      autumn: [
+        { char: '金', meaning: '坚韧、高洁' },
+        { char: '铭', meaning: '铭记、深刻' },
+        { char: '锋', meaning: '锋锐、进取' },
+        { char: '钧', meaning: '均衡、完美' },
+        { char: '皓', meaning: '光明、纯洁' },
+        { char: '铮', meaning: '坚强、正直' },
+        { char: '钰', meaning: '宝玉、珍贵' },
+        { char: '铄', meaning: '光明、卓越' },
+        { char: '锦', meaning: '绚丽、美好' },
+        { char: '钊', meaning: '光明、锐利' }
+      ],
+      winter: [
+        { char: '润', meaning: '滋润、恩泽' },
+        { char: '泽', meaning: '恩泽、光润' },
+        { char: '涵', meaning: '包容、深厚' },
+        { char: '渊', meaning: '深邃、智慧' },
+        { char: '雪', meaning: '纯洁、高洁' },
+        { char: '淳', meaning: '纯厚、朴实' },
+        { char: '澄', meaning: '清澈、明净' },
+        { char: '潮', meaning: '气势、活力' },
+        { char: '沛', meaning: '充沛、浩大' },
+        { char: '济', meaning: '济世、广益' }
+      ]
+    }
+    
+    // 随机打乱选择
+    return elements[season].sort(() => Math.random() - 0.5)
+  }
+
+  const season = getSeason(birthdate)
+  const firstLetter = englishName.toLowerCase()[0]
+  
+  // 随机选择姓氏
+  const matchingSurnames = (surnameMap[firstLetter] || ['李', '王', '张']).sort(() => Math.random() - 0.5)
+  
+  // 获取谐音字和五行字
+  const translitChars = getTransliteration(englishName)
+  const elementChars = getElementChars(season)
+  
+  // 生成多个名字组合
+  const nameOptions = []
+  
+  // 随机组合生成名字
+  matchingSurnames.forEach(surname => {
+    translitChars.forEach(translit => {
+      elementChars.forEach(element => {
+        if (Math.random() > 0.5) { // 随机决定字的顺序
+          nameOptions.push({
+            fullName: surname + translit.char + element.char,
+            explanation: {
+              surname: `${surname}氏，${surname.length === 1 ? '单姓' : '双姓'}，源远流长。与英文名首字母 ${firstLetter.toUpperCase()} 谐音呼应。`,
+              translit: `${translit.char}：${translit.meaning}，取自英文名 ${englishName} 的谐音。`,
+              element: `${element.char}：${element.meaning}，体现${getSeason(birthdate)}季节的特质。`
+            }
+          })
+        } else {
+          nameOptions.push({
+            fullName: surname + element.char + translit.char,
+            explanation: {
+              surname: `${surname}氏，${surname.length === 1 ? '单姓' : '双姓'}，源远流长。与英文名首字母 ${firstLetter.toUpperCase()} 谐音呼应。`,
+              element: `${element.char}：${element.meaning}，体现${getSeason(birthdate)}季节的特质。`,
+              translit: `${translit.char}：${translit.meaning}，取自英文名 ${englishName} 的谐音。`
+            }
+          })
+        }
+      })
+    })
+  })
+
+  // 随机打乱并选择最佳的三个组合
+  const shuffledOptions = nameOptions.sort(() => Math.random() - 0.5)
+  const bestOptions = shuffledOptions.slice(0, 3)
+  
+  // 生成详细解释
+  const generateExplanation = (option) => `
+    【姓氏寓意】
+    ${option.explanation.surname}
 
     【名字构成】
-    ${surname.length === 1 
-      ? `名字由"${translitChar}"和"${elementChar}"二字组成：
-         "${translitChar}"字取自英文名 ${englishName} 的谐音，寓意与西方文化的美好连结；
-         "${elementChar}"字体现${getSeason(birthdate)}季节的特质，${
-           season === 'spring' ? '如春木般充满生机与希望' :
-           season === 'summer' ? '似烈火般热情似火、光芒四射' :
-           season === 'autumn' ? '若秋金般坚毅果断、光华内敛' :
-           '似静水般智慧深邃、包容万物'
-         }。`
-      : `名字由"${zodiacTrait}"和"${elementChar}"二字组成：
-         "${zodiacTrait}"字展现${zodiacTraits[zodiac].description}的优雅气质；
-         "${elementChar}"字寄托${getSeason(birthdate)}季节的自然灵韵。`
-    }
+    第一字：${option.explanation.translit}
+    第二字：${option.explanation.element}
 
     【星座特质】
     生于${getZodiacDisplay(zodiac).split(' ')[0]}，具${zodiacTraits[zodiac].description}的特质。
@@ -403,21 +544,6 @@ function generateChineseName(englishName, birthdate, zodiac) {
       zodiac === 'capricorn' ? '踏实坚毅，志存高远' :
       zodiac === 'aquarius' ? '独树一帜，创新求变' :
       '心怀梦想，浪漫多情'}
-
-    【生肖印记】
-    ${birthYear}年出生，属${zodiacAnimal}。${
-      zodiacAnimal === '鼠' ? '机灵聪慧，善于钻营' :
-      zodiacAnimal === '牛' ? '勤恳踏实，力大无穷' :
-      zodiacAnimal === '虎' ? '威严勇猛，王者之风' :
-      zodiacAnimal === '兔' ? '温柔敏感，优雅灵动' :
-      zodiacAnimal === '龙' ? '气势磅礴，龙腾九天' :
-      zodiacAnimal === '蛇' ? '智慧优雅，深藏不露' :
-      zodiacAnimal === '马' ? '奔放不羁，自由驰骋' :
-      zodiacAnimal === '羊' ? '温顺和善，艺术情怀' :
-      zodiacAnimal === '猴' ? '聪明灵活，活泼好动' :
-      zodiacAnimal === '鸡' ? '勤劳守时，光明磊落' :
-      zodiacAnimal === '狗' ? '忠诚可靠，守护正义' :
-      '善良温和，福气深厚'}
 
     【五行相生】
     生于${getSeason(birthdate)}季，五行属${
@@ -439,26 +565,51 @@ function generateChineseName(englishName, birthdate, zodiac) {
     前程似锦，未来可期！
   `
 
-  return { name: fullName, explanation: explanation.trim() }
+  return {
+    names: bestOptions.map(option => ({
+      name: option.fullName,
+      explanation: generateExplanation(option).trim()
+    }))
+  }
 }
 
-async function handleSubmit() {
-  showBagua.value = true
-  showResult.value = false
-  resultOpacity.value = 0
-
-  // 构建完整的出生日期字符串
-  const birthdate = `${birthYear.value}-${String(birthMonth.value).padStart(2, '0')}-${String(birthDay.value).padStart(2, '0')}`
-
-  // 等待八卦动画
-  await new Promise(resolve => setTimeout(resolve, 3000))
+const handleSubmit = async () => {
+  if (!isFormValid.value) return
   
-  const result = generateChineseName(englishName.value, birthdate, zodiac.value)
-  generatedName.value = result.name
-  nameExplanation.value = result.explanation
+  // 定义特殊名字数组
+  const specialNames = ['方震', '于骐恺', 'auceptin','Auceptin','于小花','mouhuae','余宗霖','刘梵佑','于越','柯远晴','李承远','张涵','lcy','霍雨婷']
+  if (specialNames.includes(englishName.value.toLowerCase())) {
+    router.push('/secret')
+    return
+  }
   
-  showBagua.value = false
-  showResult.value = true
+  try {
+    showBagua.value = true
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // 构建完整的出生日期字符串
+    const birthdate = `${birthYear.value}-${String(birthMonth.value).padStart(2, '0')}-${String(birthDay.value).padStart(2, '0')}`
+    
+    // 生成名字
+    const result = generateChineseName(englishName.value, birthdate, zodiac.value)
+    
+    // 设置结果
+    generatedName.value = result.names[0].name
+    nameExplanation.value = result.names[0].explanation
+    
+    // 显示结果
+    showResult.value = true
+    
+    // 等待八卦动画完成后隐藏
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    showBagua.value = false
+  } catch (error) {
+    console.error('生成名字时出错:', error)
+    showBagua.value = false
+    showResult.value = true
+    generatedName.value = '生成失败'
+    nameExplanation.value = '抱歉，生成名字时出现错误，请重试。'
+  }
 }
 
 onMounted(() => {

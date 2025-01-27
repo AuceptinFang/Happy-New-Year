@@ -158,7 +158,7 @@ const sendMessage = async () => {
 
 const checkSecretKey = () => {
   if (secretKey.value === '1314520') {
-    router.push('/dino')
+    router.push('/hint')
   } else if (secretKey.value === '5201314') {
     router.push('/support')
   } else if (secretKey.value === 'wwwOrzwww') {
@@ -580,11 +580,26 @@ textarea:focus {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+.dark-theme .input-section {
+  background: rgba(44, 62, 80, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .dark-theme .message-input,
 .dark-theme .key-input {
   background: rgba(0, 0, 0, 0.3);
   border-color: rgba(255, 255, 255, 0.1);
   color: #fff;
+}
+
+.dark-theme textarea {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dark-theme textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .dark-theme .send-btn {

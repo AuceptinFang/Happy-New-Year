@@ -1,26 +1,44 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import StartPoint from '../views/StartPoint.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import NamePage from '../views/NamePage.vue'
 import GamePage from '../views/GamePage.vue'
+import PaintingPage from '../views/PaintingPage.vue'
+import SecretPage from '../views/SecretPage.vue'
+import StartPoint from '../views/StartPoint.vue'
 import PunishmentPage from '../views/PunishmentPage.vue'
 import AIChatPage from '../views/AIChatPage.vue'
 import SupportPage from '../views/SupportPage.vue'
 import DarkPage from '../views/DarkPage.vue'
 import DinoPage from '../views/DinoPage.vue'
-import NamePage from '../views/NamePage.vue'
 import EndPoint from '../views/EndPoint.vue'
+import HintPage from '../views/HintPage.vue'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'start',
-      component: StartPoint
+      path: '/name',
+      name: 'name',
+      component: NamePage
     },
     {
       path: '/game',
       name: 'game',
       component: GamePage
+    },
+    {
+      path: '/painting',
+      name: 'painting',
+      component: PaintingPage
+    },
+    {
+      path: '/secret',
+      name: 'secret',
+      component: SecretPage
+    },
+    {
+      path: '/',
+      name: 'start',
+      component: StartPoint
     },
     {
       path: '/punishment',
@@ -48,14 +66,14 @@ const router = createRouter({
       component: DinoPage
     },
     {
-      path: '/name',
-      name: 'name',
-      component: NamePage
-    },
-    {
       path: '/endpoint',
       name: 'endpoint',
       component: EndPoint
+    },
+    {
+      path: '/hint',
+      name: 'hint',
+      component: HintPage
     }
   ]
 })
