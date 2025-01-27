@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import NamePage from '../views/NamePage.vue'
 import GamePage from '../views/GamePage.vue'
 import PaintingPage from '../views/PaintingPage.vue'
@@ -13,7 +13,7 @@ import EndPoint from '../views/EndPoint.vue'
 import HintPage from '../views/HintPage.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory('./'),
   routes: [
     {
       path: '/name',
