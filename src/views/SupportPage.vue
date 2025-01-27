@@ -10,8 +10,8 @@
         <p class="hint">既然你这么真诚，那我也要告诉你一个秘密：</p>
         <div class="secret">
           <p>真正的秘钥其实是：</p>
-          <p class="key-text">1314520</p>
-          <p class="key-meaning">一生一世我爱你</p>
+          <p class="key-text">3832414122</p>
+          <p class="key-meaning">梦回高中化学</p>
         </div>
       </div>
       <div class="qrcode-section">

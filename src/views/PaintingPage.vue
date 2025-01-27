@@ -12,7 +12,11 @@
       @mousedown="startDrawing"   
       @mousemove="drawing"        
       @mouseup="stopDrawing"      
-      @mouseleave="stopDrawing"   
+      @mouseleave="stopDrawing"
+      @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="stopDrawing"
+      @touchcancel="stopDrawing"   
     ></canvas>
 
     <div class="control-panel">
@@ -57,7 +61,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -78,24 +82,50 @@ export default {
         return
       }
       try {
-        const canvasWidth = 800
-        const canvasHeight = 400
+        // 根据设备像素比调整画布尺寸
+        const dpr = window.devicePixelRatio || 1
+        const rect = canvas.value.getBoundingClientRect()
         
-        canvas.value.width = canvasWidth
-        canvas.value.height = canvasHeight
+        // 设置画布的实际尺寸
+        canvas.value.width = rect.width * dpr
+        canvas.value.height = rect.height * dpr
         
         ctx.value = canvas.value.getContext('2d')
         if (!ctx.value) {
           throw new Error('无法获取 Canvas 上下文')
         }
         
+        // 缩放上下文以匹配设备像素比
+        ctx.value.scale(dpr, dpr)
+        
+        // 设置绘图样式
         ctx.value.lineWidth = 8
         ctx.value.lineCap = 'round'
         ctx.value.strokeStyle = '#4CAF50'
         
         // 绘制初始背景
         ctx.value.fillStyle = '#fff8f0'
-        ctx.value.fillRect(0, 0, canvasWidth, canvasHeight)
+        ctx.value.fillRect(0, 0, rect.width, rect.height)
+        
+        // 添加窗口大小改变事件监听
+        const handleResize = () => {
+          const newRect = canvas.value.getBoundingClientRect()
+          canvas.value.width = newRect.width * dpr
+          canvas.value.height = newRect.height * dpr
+          ctx.value.scale(dpr, dpr)
+          ctx.value.lineWidth = 8
+          ctx.value.lineCap = 'round'
+          ctx.value.strokeStyle = '#4CAF50'
+          ctx.value.fillStyle = '#fff8f0'
+          ctx.value.fillRect(0, 0, newRect.width, newRect.height)
+        }
+        
+        window.addEventListener('resize', handleResize)
+        
+        // 组件卸载时移除事件监听
+        onUnmounted(() => {
+          window.removeEventListener('resize', handleResize)
+        })
       } catch (error) {
         console.error('Canvas 初始化错误:', error)
       }
@@ -280,6 +310,41 @@ export default {
       router.push('/game')
     }
 
+    const handleTouchStart = (e) => {
+      e.preventDefault()
+      const touch = e.touches[0]
+      const rect = canvas.value.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      
+      // 计算触摸点相对于画布的准确位置
+      const x = (touch.clientX - rect.left) * (canvas.value.width / (rect.width * dpr))
+      const y = (touch.clientY - rect.top) * (canvas.value.height / (rect.height * dpr))
+      
+      isDrawing.value = true
+      path.value = []
+      path.value.push({ x, y })
+      
+      ctx.value.beginPath()
+      ctx.value.moveTo(x, y)
+    }
+
+    const handleTouchMove = (e) => {
+      e.preventDefault()
+      if (!isDrawing.value) return
+      
+      const touch = e.touches[0]
+      const rect = canvas.value.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      
+      // 计算触摸点相对于画布的准确位置
+      const x = (touch.clientX - rect.left) * (canvas.value.width / (rect.width * dpr))
+      const y = (touch.clientY - rect.top) * (canvas.value.height / (rect.height * dpr))
+      
+      path.value.push({ x, y })
+      ctx.value.lineTo(x, y)
+      ctx.value.stroke()
+    }
+
     return {
       canvas,
       isDrawing,
@@ -289,6 +354,8 @@ export default {
       startDrawing,
       drawing,
       stopDrawing,
+      handleTouchStart,
+      handleTouchMove,
       clearCanvas,
       evaluateDrawing,
       goToNextPage
@@ -301,7 +368,7 @@ export default {
 /* 全局背景样式 */
 html {
   min-height: 100%;
-  background: linear-gradient(135deg, #ffebeb, #ffaf7d);
+  background: linear-gradient(135deg,#ffaaaa, #ffe44d);
 }
 
 body {
@@ -319,7 +386,7 @@ body {
 .snake-artist {
   max-width: 800px;
   width: 100%;
-  margin: 2rem auto;
+  margin: 6rem auto 2rem; /* 增加顶部边距，为横批留出空间 */
   padding: 20px;
   background: linear-gradient(135deg, #fff9f9, #fff5f5);
   color: #333333;
@@ -330,7 +397,7 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border: 2px solid #ffc0cb;
 }
 
@@ -369,7 +436,8 @@ canvas {
   cursor: crosshair;
   display: block;
   position: relative;
-  z-index: 1;
+  z-index: 2; /* 确保画布在最上层 */
+  touch-action: none; /* 防止触摸滚动 */
 }
 
 .control-panel {
@@ -469,34 +537,30 @@ canvas {
 
 @media (max-width: 768px) {
   .snake-artist {
-    width: 95%;
+    margin: 5rem auto 1rem;
     padding: 15px;
-    margin: 1rem auto;
+    width: 95%;
   }
 
   canvas {
     height: 300px;
-    width: 100%;
-    max-width: 100%;
-    touch-action: none; /* 防止触摸滚动干扰绘画 */
+    border-width: 2px;
   }
 
   .control-panel {
-    flex-direction: column;
-    gap: 0.8rem;
-    width: 100%;
+    position: relative;
+    z-index: 2; /* 确保控制面板可点击 */
+  }
+
+  .crystal-ball {
+    position: relative;
+    z-index: 2; /* 确保评分区域可点击 */
   }
 
   .snake-btn {
     width: 100%;
     padding: 12px;
     font-size: 1rem;
-  }
-
-  .crystal-ball {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    width: calc(100% - 2rem);
   }
 
   .score-display {
@@ -508,29 +572,25 @@ canvas {
   }
 
   .horizontal-scroll {
+    width: 140px;
     font-size: 20px;
-    padding: 8px 20px;
-    white-space: nowrap;
-    top: 10px;
-  }
-  
-  .vertical-couplets {
-    padding: 0 5px;
+    padding: 8px 0;
+    top: 15px;
   }
   
   .couplet {
     font-size: 20px;
-    height: 200px;
+    height: 240px;
     padding: 20px 10px;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
   }
   
   .couplet.left {
-    left: 5px;
+    left: 10px;
   }
   
   .couplet.right {
-    right: 5px;
+    right: 10px;
   }
 
   .next-btn {
@@ -544,25 +604,22 @@ canvas {
 /* 小屏幕适配 */
 @media (max-width: 480px) {
   .snake-artist {
-    width: 100%;
+    margin: 4rem auto 1rem;
     padding: 10px;
-    margin: 0.5rem auto;
-    border-radius: 8px;
+    width: 100%;
   }
 
   canvas {
     height: 250px;
-    border-width: 2px;
+  }
+
+  .control-panel {
+    padding: 0 10px;
   }
 
   .snake-btn {
     padding: 10px;
     font-size: 0.9rem;
-  }
-
-  .crystal-ball {
-    margin-top: 1rem;
-    padding: 0.8rem;
   }
 
   .score-display {
@@ -574,15 +631,25 @@ canvas {
   }
 
   .horizontal-scroll {
+    width: 120px;
     font-size: 18px;
-    padding: 6px 15px;
+    padding: 6px 0;
+    top: 10px;
   }
 
   .couplet {
     font-size: 16px;
-    height: 180px;
+    height: 200px;
     padding: 15px 8px;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
+  }
+
+  .couplet.left {
+    left: 5px;
+  }
+
+  .couplet.right {
+    right: 5px;
   }
 
   .next-btn {
@@ -591,10 +658,14 @@ canvas {
   }
 }
 
-/* 添加触摸事件支持 */
+/* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
   canvas {
     cursor: default;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .snake-btn:hover {
@@ -616,64 +687,66 @@ canvas {
 
 /* 对联和横批样式 */
 .couplet-container {
+  position: absolute;
   width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10; /* 提高层级，确保在最上层 */
 }
 
 .horizontal-scroll {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  padding: 10px 0;
   background: linear-gradient(135deg, #e60012, #8b0000);
   color: #fff;
-  padding: 10px 30px;
   font-size: 24px;
   font-weight: bold;
   border-radius: 8px;
-  margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 11;
 }
 
 .vertical-couplets {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
   display: flex;
   justify-content: space-between;
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
   pointer-events: none;
+  z-index: 10;
 }
 
 .couplet {
   writing-mode: vertical-rl;
-  text-orientation: upright;
+  font-size: 28px;
+  height: 300px;
+  padding: 30px 15px;
   background: linear-gradient(135deg, #e60012, #8b0000);
   color: #fff;
-  padding: 30px 15px;
-  font-size: 28px;
+  letter-spacing: 8px;
   font-weight: bold;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  height: 300px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  letter-spacing: 8px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .couplet.left {
-  margin-left: 40px;
-  position: fixed;
-  left: 0;
-  top: calc(50% - 250px);
+  left: 20px;
 }
 
 .couplet.right {
-  margin-right: 40px;
-  position: fixed;
-  right: 0;
-  top: calc(50% - 250px);
+  right: 20px;
 }
 
 /* 添加继续探索按钮样式 */
@@ -703,25 +776,25 @@ canvas {
 
 @media (max-width: 768px) {
   .horizontal-scroll {
+    width: 140px;
     font-size: 20px;
-    padding: 8px 20px;
+    padding: 8px 0;
+    top: 15px;
   }
   
   .couplet {
-    font-size: 24px;
-    padding: 25px 12px;
-    height: 250px;
+    font-size: 20px;
+    height: 240px;
+    padding: 20px 10px;
     letter-spacing: 6px;
   }
   
   .couplet.left {
-    margin-left: 20px;
-    top: calc(50% - 200px);
+    left: 10px;
   }
   
   .couplet.right {
-    margin-right: 20px;
-    top: calc(50% - 200px);
+    right: 10px;
   }
   
   .next-btn {
