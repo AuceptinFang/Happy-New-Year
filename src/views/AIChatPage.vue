@@ -126,7 +126,7 @@ const sendMessage = async () => {
 
   try {
     const stream = await openai.chat.completions.create({
-      model: "deepseek-reasoner",
+      model: "deepseek-chat",
       messages: messages.value,
       stream: true,
       max_tokens: 4000

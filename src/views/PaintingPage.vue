@@ -3,8 +3,8 @@
     <div class="couplet-container">
       <div class="horizontal-scroll">画一条蛇</div>
       <div class="vertical-couplets">
-        <div class="couplet left">蛇行翠柳随风舞</div>
-        <div class="couplet right">喜气盈门贺岁福</div>
+        <div class="couplet left">灵蛇巧舞嫌足赘</div>
+        <div class="couplet right">妙笔轻挥笑墨多</div>
       </div>
     </div>
     <canvas 

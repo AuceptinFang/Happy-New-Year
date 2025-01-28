@@ -20,9 +20,6 @@
 # 克隆项目
 git clone https://github.com/AuceptinFang/Happy-New-Year.git
 
-# 进入项目目录
-cd Happy-New-Year
-
 # 安装依赖
 npm install
 
