@@ -124,36 +124,56 @@ const sendMessage = async () => {
   userInput.value = ''
   await scrollToBottom()
 
-  try {
-    const stream = await openai.chat.completions.create({
-      model: "deepseek-chat",
-      messages: messages.value,
-      stream: true,
-      max_tokens: 4000
-    })
+  let retryCount = 0
+  const maxRetries = 3
 
-    let aiMessage = {
-      role: 'assistant',
-      content: ''
-    }
-    messages.value.push(aiMessage)
+  while (retryCount < maxRetries) {
+    try {
+      const stream = await openai.chat.completions.create({
+        model: "deepseek-chat",
+        messages: messages.value,
+        stream: true,
+        max_tokens: 1000,
+        temperature: 0.7,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.5
+      })
 
-    for await (const chunk of stream) {
-      if (chunk.choices[0]?.delta?.content) {
-        aiMessage.content += chunk.choices[0].delta.content
-        await scrollToBottom()
+      let aiMessage = {
+        role: 'assistant',
+        content: ''
+      }
+      messages.value.push(aiMessage)
+
+      for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content) {
+          aiMessage.content += chunk.choices[0].delta.content
+          await scrollToBottom()
+        }
+      }
+      
+      // 如果成功获取响应，跳出重试循环
+      break
+      
+    } catch (error) {
+      console.error(`尝试 ${retryCount + 1} 失败:`, error)
+      retryCount++
+      
+      // 如果是最后一次重试还失败了，显示错误消息
+      if (retryCount === maxRetries) {
+        messages.value.push({
+          role: 'assistant',
+          content: '抱歉，我现在可能有点累了，请稍后再试...'
+        })
+      } else {
+        // 等待一段时间后重试
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
       }
     }
-  } catch (error) {
-    console.error('Error:', error)
-    messages.value.push({
-      role: 'assistant',
-      content: '抱歉，发生了错误：' + error.message
-    })
-  } finally {
-    isLoading.value = false
-    await scrollToBottom()
   }
+
+  isLoading.value = false
+  await scrollToBottom()
 }
 
 const checkSecretKey = () => {
