@@ -1,5 +1,5 @@
 <template>
-  <div class="snake-artist">
+    <div class="snake-artist">
     <div class="couplet-container">
       <div class="horizontal-scroll">画一条蛇</div>
       <div class="vertical-couplets">
@@ -7,45 +7,45 @@
         <div class="couplet right">妙笔轻挥笑墨多</div>
       </div>
     </div>
-    <canvas 
-      ref="canvas"
-      @mousedown="startDrawing"   
-      @mousemove="drawing"        
-      @mouseup="stopDrawing"      
-      @mouseleave="stopDrawing"
+      <canvas 
+        ref="canvas"
+        @mousedown="startDrawing"   
+        @mousemove="drawing"        
+        @mouseup="stopDrawing"      
+        @mouseleave="stopDrawing"   
       @touchstart="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="stopDrawing"
       @touchcancel="stopDrawing"   
-    ></canvas>
+      ></canvas>
 
-    <div class="control-panel">
-      <button @click="clearCanvas" class="snake-btn">
+      <div class="control-panel">
+        <button @click="clearCanvas" class="snake-btn">
         🐍 重新绘制
-      </button>
-      
-      <button 
+        </button>
+        
+        <button 
         @click="evaluateDrawing" 
         :disabled="isEvaluating"
-        class="snake-btn magic-btn"
-      >
+          class="snake-btn magic-btn"
+        >
         🔮 {{ isEvaluating ? '分析中...' : '分析画作' }}
-      </button>
-    </div>
-
-    <div v-if="score !== null" class="crystal-ball">
-      <div class="score-display">
-        蛇相似度: {{ score }}%
+        </button>
+      </div>
+  
+      <div v-if="score !== null" class="crystal-ball">
+        <div class="score-display">
+          蛇相似度: {{ score }}%
         <span v-if="score >= 80" class="success">🎉 是条好蛇！</span>
         <span v-if="score < 80" class="fail">😢 再试一次...</span>
-      </div>
-      <div class="snake-progress">
-        <div 
-          class="snake-bar" 
-          :style="{ width: score + '%' }"
+        </div>
+        <div class="snake-progress">
+          <div 
+            class="snake-bar" 
+            :style="{ width: score + '%' }"
           :class="{ 'success-bar': score >= 80 }"
-        ></div>
-      </div>
+          ></div>
+        </div>
       <div class="feedback-text" v-if="feedback">
         {{ feedback }}
       </div>
@@ -58,23 +58,23 @@
       </button>
     </div>
   </div>
-</template>
-
-<script>
+  </template>
+  
+  <script>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-export default {
-  setup() {
-    const canvas = ref(null)
-    const ctx = ref(null)
-    const isDrawing = ref(false)
-    const path = ref([])
-    const score = ref(null)
+  import { useRouter } from 'vue-router'
+  
+  export default {
+    setup() {
+      const canvas = ref(null)
+      const ctx = ref(null)
+      const isDrawing = ref(false)
+      const path = ref([])
+      const score = ref(null)
     const isEvaluating = ref(false)
     const feedback = ref('')
-    const router = useRouter()
-
+      const router = useRouter()
+  
     // 初始化画布
     onMounted(() => {
       if (!canvas.value) {
@@ -268,43 +268,43 @@ export default {
     }
 
     // 开始绘制
-    const startDrawing = (e) => {
-      isDrawing.value = true
-      path.value = []
-      const rect = canvas.value.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      path.value.push({ x, y })
-      ctx.value.beginPath()
-      ctx.value.moveTo(x, y)
-    }
-
+      const startDrawing = (e) => {
+        isDrawing.value = true
+        path.value = []
+        const rect = canvas.value.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        path.value.push({ x, y })
+        ctx.value.beginPath()
+        ctx.value.moveTo(x, y)
+      }
+  
     // 绘制中
-    const drawing = (e) => {
-      if (!isDrawing.value) return
-      const rect = canvas.value.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      path.value.push({ x, y })
-      ctx.value.lineTo(x, y)
-      ctx.value.stroke()
-    }
-
+      const drawing = (e) => {
+        if (!isDrawing.value) return
+        const rect = canvas.value.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        path.value.push({ x, y })
+        ctx.value.lineTo(x, y)
+        ctx.value.stroke()
+      }
+  
     // 停止绘制
-    const stopDrawing = () => {
-      isDrawing.value = false
-    }
-
+      const stopDrawing = () => {
+        isDrawing.value = false
+      }
+  
     // 清除画布
-    const clearCanvas = () => {
-      ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+      const clearCanvas = () => {
+        ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
       ctx.value.fillStyle = '#fff8f0'
       ctx.value.fillRect(0, 0, canvas.value.width, canvas.value.height)
-      score.value = null
+        score.value = null
       feedback.value = ''
-      path.value = []
-    }
-
+        path.value = []
+      }
+  
     // 添加跳转到下一页的方法
     const goToNextPage = () => {
       router.push('/game')
@@ -343,27 +343,27 @@ export default {
       path.value.push({ x, y })
       ctx.value.lineTo(x, y)
       ctx.value.stroke()
-    }
-
-    return {
-      canvas,
-      isDrawing,
-      score,
+      }
+  
+      return {
+        canvas,
+        isDrawing,
+        score,
       isEvaluating,
       feedback,
-      startDrawing,
-      drawing,
-      stopDrawing,
+        startDrawing,
+        drawing,
+        stopDrawing,
       handleTouchStart,
       handleTouchMove,
-      clearCanvas,
+        clearCanvas,
       evaluateDrawing,
       goToNextPage
     }
+    }
   }
-}
-</script>
-
+  </script>
+  
 <style>
 /* 全局背景样式 */
 html {
@@ -382,17 +382,17 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #ffaaaa, #ffe44d);
 }
-
-.snake-artist {
-  max-width: 800px;
+  
+  .snake-artist {
+    max-width: 800px;
   width: 100%;
   margin: 6rem auto 2rem; /* 增加顶部边距，为横批留出空间 */
-  padding: 20px;
+    padding: 20px;
   background: linear-gradient(135deg, #fff9f9, #fff5f5);
-  color: #333333;
-  border-radius: 12px;
+    color: #333333;
+    border-radius: 12px;
   box-shadow: 0 4px 20px rgba(255, 192, 192, 0.3);
-  transition: background 0.3s ease;
+    transition: background 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -425,98 +425,98 @@ body {
   bottom: -20px;
   right: -20px;
   transform: rotate(135deg);
-}
-
-canvas {
-  width: 100%;
-  height: 400px;
+  }
+  
+  canvas {
+    width: 100%;
+    height: 400px;
   border: 3px solid #ffb6c1;
   background: linear-gradient(to bottom, #ffffff, #fff9f9);
-  border-radius: 8px;
-  cursor: crosshair;
+    border-radius: 8px;
+    cursor: crosshair;  
   display: block;
   position: relative;
   z-index: 2; /* 确保画布在最上层 */
   touch-action: none; /* 防止触摸滚动 */
-}
-
-.control-panel {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.snake-btn {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s, opacity 0.2s;
+  }
+  
+  .control-panel {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .snake-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
   background: linear-gradient(135deg, #ffb6c1, #ffd1d1);
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
-}
-
-.snake-btn:hover {
-  transform: scale(1.05);
-}
-
-.snake-btn:active {
-  transform: scale(0.95);
-}
-
-.magic-btn {
+  }
+  
+  .snake-btn:hover {
+    transform: scale(1.05);
+  }
+  
+  .snake-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .magic-btn {
   background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
-  color: white;
-}
-
-.crystal-ball {
-  margin-top: 2rem;
-  padding: 1.5rem;
+    color: white;
+  }
+  
+  .crystal-ball {
+    margin-top: 2rem;
+    padding: 1.5rem;
   background: linear-gradient(135deg, #fff9f9, #fff5f5);
-  color: #333;
-  border-radius: 12px;
+    color: #333;
+    border-radius: 12px;
   box-shadow: 0 4px 20px rgba(255, 182, 193, 0.2);
   width: 100%;
   border: 1px solid rgba(255, 182, 193, 0.3);
   position: relative;
   z-index: 1;
 }
-
-.score-display {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.success {
+  
+  .score-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .success {
   color: #ff8da1;
-  animation: snakeDance 0.5s ease;
-}
-
-.fail {
-  color: #f44336;
-}
-
-.snake-progress {
-  height: 20px;
+    animation: snakeDance 0.5s ease;
+  }
+  
+  .fail {
+    color: #f44336;
+  }
+  
+  .snake-progress {
+    height: 20px;
   background: rgba(255, 182, 193, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
+    border-radius: 10px;
+    overflow: hidden;
   margin-bottom: 1rem;
-}
-
-.snake-bar {
-  height: 100%;
+  }
+  
+  .snake-bar {
+    height: 100%;
   background: #ffb6c1;
-  transition: width 0.5s ease;
-}
-
-.success-bar {
+    transition: width 0.5s ease;
+  }
+  
+  .success-bar {
   background: linear-gradient(90deg, #ffb6c1, #ffc0cb);
 }
 
@@ -525,16 +525,16 @@ canvas {
   color: #666;
   font-size: 1.1rem;
   margin-top: 1rem;
-}
-
-@keyframes snakeDance {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(3deg); }
-  100% { transform: rotate(0deg); }
-}
-
+  }
+  
+  @keyframes snakeDance {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(3deg); }
+    100% { transform: rotate(0deg); }
+  }
+  
 @media (max-width: 768px) {
   .snake-artist {
     margin: 5rem auto 1rem;

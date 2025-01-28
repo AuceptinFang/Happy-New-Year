@@ -125,7 +125,7 @@ try {
   ];
 
   const stream = await openai.chat.completions.create({
-    model: "deepseek-chat",
+    model: "deepseek-reasoner",
     messages: messages,
     stream: true,
     max_tokens: 500

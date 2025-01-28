@@ -130,7 +130,7 @@ const sendMessage = async () => {
   while (retryCount < maxRetries) {
     try {
       const stream = await openai.chat.completions.create({
-        model: "deepseek-chat",
+        model: "deepseek-reasoner",
         messages: messages.value,
         stream: true,
         max_tokens: 1000,
